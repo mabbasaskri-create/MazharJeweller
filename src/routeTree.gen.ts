@@ -9,55 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as CartRouteImport } from './routes/cart'
-import { Route as DecorRouteImport } from './routes/decor'
-import { Route as GiftsRouteImport } from './routes/gifts'
-import { Route as HelpRouteImport } from './routes/help'
-import { Route as JewelryRouteImport } from './routes/jewelry'
 import { Route as ReturnsRouteImport } from './routes/returns'
-import { Route as SaleRouteImport } from './routes/sale'
 import { Route as ShippingRouteImport } from './routes/shipping'
-import { Route as SigninRouteImport } from './routes/signin'
-import { Route as StoresRouteImport } from './routes/stores'
-import { Route as WatchesRouteImport } from './routes/watches'
-import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 
-const CartRoute = CartRouteImport.update({
-  id: '/cart',
-  path: '/cart',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DecorRoute = DecorRouteImport.update({
-  id: '/decor',
-  path: '/decor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GiftsRoute = GiftsRouteImport.update({
-  id: '/gifts',
-  path: '/gifts',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HelpRoute = HelpRouteImport.update({
-  id: '/help',
-  path: '/help',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JewelryRoute = JewelryRouteImport.update({
-  id: '/jewelry',
-  path: '/jewelry',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ReturnsRoute = ReturnsRouteImport.update({
   id: '/returns',
   path: '/returns',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SaleRoute = SaleRouteImport.update({
-  id: '/sale',
-  path: '/sale',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShippingRoute = ShippingRouteImport.update({
@@ -65,24 +28,19 @@ const ShippingRoute = ShippingRouteImport.update({
   path: '/shipping',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SigninRoute = SigninRouteImport.update({
-  id: '/signin',
-  path: '/signin',
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StoresRoute = StoresRouteImport.update({
-  id: '/stores',
-  path: '/stores',
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WatchesRoute = WatchesRouteImport.update({
-  id: '/watches',
-  path: '/watches',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WishlistRoute = WishlistRouteImport.update({
-  id: '/wishlist',
-  path: '/wishlist',
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -103,53 +61,32 @@ const ProductsSlugRoute = ProductsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/cart': typeof CartRoute
-  '/decor': typeof DecorRoute
-  '/gifts': typeof GiftsRoute
-  '/help': typeof HelpRoute
-  '/jewelry': typeof JewelryRoute
   '/returns': typeof ReturnsRoute
-  '/sale': typeof SaleRoute
   '/shipping': typeof ShippingRoute
-  '/signin': typeof SigninRoute
-  '/stores': typeof StoresRoute
-  '/watches': typeof WatchesRoute
-  '/wishlist': typeof WishlistRoute
+  '/cart': typeof CartRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/category/$slug': typeof CategorySlugRoute
   '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/cart': typeof CartRoute
-  '/decor': typeof DecorRoute
-  '/gifts': typeof GiftsRoute
-  '/help': typeof HelpRoute
-  '/jewelry': typeof JewelryRoute
   '/returns': typeof ReturnsRoute
-  '/sale': typeof SaleRoute
   '/shipping': typeof ShippingRoute
-  '/signin': typeof SigninRoute
-  '/stores': typeof StoresRoute
-  '/watches': typeof WatchesRoute
-  '/wishlist': typeof WishlistRoute
+  '/cart': typeof CartRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/category/$slug': typeof CategorySlugRoute
   '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/cart': typeof CartRoute
-  '/decor': typeof DecorRoute
-  '/gifts': typeof GiftsRoute
-  '/help': typeof HelpRoute
-  '/jewelry': typeof JewelryRoute
   '/returns': typeof ReturnsRoute
-  '/sale': typeof SaleRoute
   '/shipping': typeof ShippingRoute
-  '/signin': typeof SigninRoute
-  '/stores': typeof StoresRoute
-  '/watches': typeof WatchesRoute
-  '/wishlist': typeof WishlistRoute
+  '/cart': typeof CartRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/category/$slug': typeof CategorySlugRoute
   '/products/$slug': typeof ProductsSlugRoute
 }
@@ -157,70 +94,42 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/cart'
-    | '/decor'
-    | '/gifts'
-    | '/help'
-    | '/jewelry'
     | '/returns'
-    | '/sale'
     | '/shipping'
-    | '/signin'
-    | '/stores'
-    | '/watches'
-    | '/wishlist'
+    | '/cart'
+    | '/about'
+    | '/contact'
     | '/category/$slug'
     | '/products/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/cart'
-    | '/decor'
-    | '/gifts'
-    | '/help'
-    | '/jewelry'
     | '/returns'
-    | '/sale'
     | '/shipping'
-    | '/signin'
-    | '/stores'
-    | '/watches'
-    | '/wishlist'
+    | '/cart'
+    | '/about'
+    | '/contact'
     | '/category/$slug'
     | '/products/$slug'
   id:
     | '__root__'
     | '/'
-    | '/cart'
-    | '/decor'
-    | '/gifts'
-    | '/help'
-    | '/jewelry'
     | '/returns'
-    | '/sale'
     | '/shipping'
-    | '/signin'
-    | '/stores'
-    | '/watches'
-    | '/wishlist'
+    | '/cart'
+    | '/about'
+    | '/contact'
     | '/category/$slug'
     | '/products/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CartRoute: typeof CartRoute
-  DecorRoute: typeof DecorRoute
-  GiftsRoute: typeof GiftsRoute
-  HelpRoute: typeof HelpRoute
-  JewelryRoute: typeof JewelryRoute
   ReturnsRoute: typeof ReturnsRoute
-  SaleRoute: typeof SaleRoute
   ShippingRoute: typeof ShippingRoute
-  SigninRoute: typeof SigninRoute
-  StoresRoute: typeof StoresRoute
-  WatchesRoute: typeof WatchesRoute
-  WishlistRoute: typeof WishlistRoute
+  CartRoute: typeof CartRoute
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
   CategorySlugRoute: typeof CategorySlugRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
 }
@@ -234,53 +143,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cart': {
-      id: '/cart'
-      path: '/cart'
-      fullPath: '/cart'
-      preLoaderRoute: typeof CartRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/decor': {
-      id: '/decor'
-      path: '/decor'
-      fullPath: '/decor'
-      preLoaderRoute: typeof DecorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/gifts': {
-      id: '/gifts'
-      path: '/gifts'
-      fullPath: '/gifts'
-      preLoaderRoute: typeof GiftsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/help': {
-      id: '/help'
-      path: '/help'
-      fullPath: '/help'
-      preLoaderRoute: typeof HelpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/jewelry': {
-      id: '/jewelry'
-      path: '/jewelry'
-      fullPath: '/jewelry'
-      preLoaderRoute: typeof JewelryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/returns': {
       id: '/returns'
       path: '/returns'
       fullPath: '/returns'
       preLoaderRoute: typeof ReturnsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sale': {
-      id: '/sale'
-      path: '/sale'
-      fullPath: '/sale'
-      preLoaderRoute: typeof SaleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shipping': {
@@ -290,32 +157,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShippingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/signin': {
-      id: '/signin'
-      path: '/signin'
-      fullPath: '/signin'
-      preLoaderRoute: typeof SigninRouteImport
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/stores': {
-      id: '/stores'
-      path: '/stores'
-      fullPath: '/stores'
-      preLoaderRoute: typeof StoresRouteImport
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/watches': {
-      id: '/watches'
-      path: '/watches'
-      fullPath: '/watches'
-      preLoaderRoute: typeof WatchesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/wishlist': {
-      id: '/wishlist'
-      path: '/wishlist'
-      fullPath: '/wishlist'
-      preLoaderRoute: typeof WishlistRouteImport
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/category/$slug': {
@@ -337,18 +197,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CartRoute: CartRoute,
-  DecorRoute: DecorRoute,
-  GiftsRoute: GiftsRoute,
-  HelpRoute: HelpRoute,
-  JewelryRoute: JewelryRoute,
   ReturnsRoute: ReturnsRoute,
-  SaleRoute: SaleRoute,
   ShippingRoute: ShippingRoute,
-  SigninRoute: SigninRoute,
-  StoresRoute: StoresRoute,
-  WatchesRoute: WatchesRoute,
-  WishlistRoute: WishlistRoute,
+  CartRoute: CartRoute,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
   CategorySlugRoute: CategorySlugRoute,
   ProductsSlugRoute: ProductsSlugRoute,
 }

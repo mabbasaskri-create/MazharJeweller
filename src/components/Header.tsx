@@ -1,13 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { Search, ShoppingBag, Heart, User, MapPin, Truck, ShieldCheck, Phone, Menu, X, ChevronRight } from "lucide-react";
 
-interface HeaderProps {
-  hideAnnouncement?: boolean;
-  hideTopBar?: boolean;
-}
-
-export function Header({ hideAnnouncement, hideTopBar }: HeaderProps) {
+export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -15,63 +9,58 @@ export function Header({ hideAnnouncement, hideTopBar }: HeaderProps) {
   }, [menuOpen]);
 
   const navItems = [
-    { label: "Jewelry", href: "/jewelry" },
-    { label: "Watches", href: "/watches" },
-    { label: "Décor", href: "/decor" },
-    { label: "Gifts", href: "/gifts" },
-    { label: "Sale", href: "/sale", sale: true },
+    { label: "Home", href: "/" },
+    { label: "Rings", href: "/category/rings" },
+    { label: "Necklaces", href: "/category/necklaces" },
+    { label: "Gold Sets", href: "/category/gold-sets" },
+    { label: "Earrings", href: "/category/earrings" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
   ];
 
   return (
     <>
-      {!hideAnnouncement && (
-        <div className="bg-primary text-primary-foreground text-[11px] md:text-xs">
-          <div className="mx-auto max-w-7xl px-4 py-2 flex items-center justify-center gap-6 flex-wrap text-center">
-            <span>✨ Free delivery on orders over PKR 5,000 — across Pakistan</span>
-            <span className="hidden md:inline">•</span>
-            <span className="hidden md:inline">Cash on Delivery • EasyPaisa • JazzCash</span>
-          </div>
-        </div>
-      )}
+      <div className="bg-[#1a1a2e] text-[#f0d68a] text-center text-xs py-2 px-4 tracking-[0.5px] font-sans">
+        Complimentary nationwide shipping on orders above PKR 150,000
+      </div>
 
-      {!hideTopBar && (
-        <div className="hidden md:block border-b border-border bg-background">
-          <div className="mx-auto max-w-7xl px-4 py-2 flex items-center justify-between text-xs text-muted-foreground">
-            <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> Karachi · Lahore · Islamabad</span>
-            <div className="flex items-center gap-4">
-              <Link to="/stores">Store Finder</Link>
-              <Link to="/help">Help</Link>
-              <span>PK | English</span>
-            </div>
-          </div>
-        </div>
-      )}
+      <header className="sticky top-0 z-40 bg-white border-b border-[#e8e0d0]">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-[72px]">
+          <button
+            aria-label="Open menu"
+            onClick={() => setMenuOpen(true)}
+            className="md:hidden flex flex-col gap-[5px] bg-none border-none cursor-pointer p-1"
+          >
+            <span className="block w-6 h-[2px] bg-[#1a1a2e] transition-[0.3s]" />
+            <span className="block w-6 h-[2px] bg-[#1a1a2e] transition-[0.3s]" />
+            <span className="block w-6 h-[2px] bg-[#1a1a2e] transition-[0.3s]" />
+          </button>
 
-      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 py-3 md:py-4 grid grid-cols-3 md:flex items-center md:justify-between">
-          <div className="flex items-center md:hidden">
-            <button aria-label="Open menu" onClick={() => setMenuOpen(true)} className="-ml-2 p-2">
-              <Menu className="h-6 w-6" />
-            </button>
-          </div>
-          <nav className="hidden md:flex gap-7 text-sm uppercase tracking-wider">
+          <Link to="/" className="font-serif text-[28px] font-bold text-[#1a1a2e] no-underline tracking-[1px]">
+            Mazhar.
+          </Link>
+
+          <nav className="hidden md:flex gap-8">
             {navItems.map((n) => (
-              <Link key={n.label} to={n.href} className={n.sale ? "text-destructive" : "hover:opacity-70"}>{n.label}</Link>
+              <Link
+                key={n.label}
+                to={n.href}
+                className="text-[13px] font-medium tracking-[0.8px] uppercase text-[#2c2c2c] no-underline hover:text-[#d4af37] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-[#d4af37] after:transition-[width_0.3s] hover:after:w-full"
+                activeProps={{ className: "text-[#d4af37] after:w-full" }}
+              >
+                {n.label}
+              </Link>
             ))}
           </nav>
 
-          <Link to="/" className="serif text-xl sm:text-2xl md:text-4xl tracking-[0.2em] md:tracking-[0.25em] text-center md:absolute md:left-1/2 md:-translate-x-1/2 whitespace-nowrap">
-            SPARKLE<span className="text-[var(--gold)]">·</span>PK
-          </Link>
-
-          <div className="flex items-center justify-end gap-3 md:gap-4">
-            <Search className="h-5 w-5 cursor-pointer" />
-            <Link to="/signin"><User className="h-5 w-5 cursor-pointer hidden sm:block" /></Link>
-            <Link to="/wishlist"><Heart className="h-5 w-5 cursor-pointer hidden sm:block" /></Link>
-            <Link to="/cart" className="relative cursor-pointer">
-              <ShoppingBag className="h-5 w-5" />
-              <span className="absolute -top-2 -right-2 bg-[var(--gold)] text-primary text-[10px] rounded-full h-4 w-4 flex items-center justify-center">2</span>
-            </Link>
+          <div className="flex gap-5 text-lg cursor-pointer">
+            <span className="icon-search">&#128269;</span>
+            <span className="icon-cart relative">
+              &#128722;
+              <span className="cart-badge absolute -top-2 -right-[10px] min-w-[18px] h-[18px] bg-[#d4af37] text-white text-[10px] font-bold rounded-full flex items-center justify-center px-[4px] leading-none">
+                3
+              </span>
+            </span>
           </div>
         </div>
       </header>
@@ -81,10 +70,10 @@ export function Header({ hideAnnouncement, hideTopBar }: HeaderProps) {
           className={`absolute inset-0 bg-black/40 transition-opacity ${menuOpen ? "opacity-100" : "opacity-0"}`}
           onClick={() => setMenuOpen(false)}
         />
-        <aside className={`absolute left-0 top-0 h-full w-[85%] max-w-sm bg-background shadow-xl flex flex-col transition-transform duration-300 ${menuOpen ? "translate-x-0" : "-translate-x-full"}`}>
-          <div className="flex items-center justify-between p-4 border-b border-border">
-            <Link to="/" className="serif text-xl tracking-[0.2em]">SPARKLE<span className="text-[var(--gold)]">·</span>PK</Link>
-            <button aria-label="Close menu" onClick={() => setMenuOpen(false)} className="p-2 -mr-2"><X className="h-6 w-6" /></button>
+        <aside className={`absolute left-0 top-0 h-full w-[85%] max-w-sm bg-white shadow-xl flex flex-col transition-transform duration-300 ${menuOpen ? "translate-x-0" : "-translate-x-full"}`}>
+          <div className="flex items-center justify-between p-4 border-b border-[#e8e0d0]">
+            <Link to="/" className="font-serif text-xl font-bold text-[#1a1a2e]">Mazhar.</Link>
+            <button aria-label="Close menu" onClick={() => setMenuOpen(false)} className="p-2 -mr-2 text-2xl">&times;</button>
           </div>
           <nav className="flex-1 overflow-y-auto py-2">
             {navItems.map((n) => (
@@ -92,23 +81,16 @@ export function Header({ hideAnnouncement, hideTopBar }: HeaderProps) {
                 key={n.label}
                 to={n.href}
                 onClick={() => setMenuOpen(false)}
-                className={`flex items-center justify-between px-5 py-4 border-b border-border text-sm uppercase tracking-wider ${n.sale ? "text-destructive" : ""}`}
+                className="flex items-center justify-between px-5 py-4 border-b border-[#e8e0d0] text-sm uppercase tracking-wider text-[#2c2c2c] no-underline"
               >
                 {n.label}
-                <ChevronRight className="h-4 w-4 opacity-50" />
+                <span className="opacity-50">&#8250;</span>
               </Link>
             ))}
-            <div className="mt-4 px-5 space-y-4 text-sm">
-              <Link to="/signin" className="flex items-center gap-3 py-2" onClick={() => setMenuOpen(false)}><User className="h-4 w-4" /> Sign in / Register</Link>
-              <Link to="/wishlist" className="flex items-center gap-3 py-2" onClick={() => setMenuOpen(false)}><Heart className="h-4 w-4" /> Wishlist</Link>
-              <Link to="/stores" className="flex items-center gap-3 py-2" onClick={() => setMenuOpen(false)}><MapPin className="h-4 w-4" /> Store Finder</Link>
-              <Link to="/shipping" className="flex items-center gap-3 py-2" onClick={() => setMenuOpen(false)}><Truck className="h-4 w-4" /> Shipping in Pakistan</Link>
-              <Link to="/returns" className="flex items-center gap-3 py-2" onClick={() => setMenuOpen(false)}><ShieldCheck className="h-4 w-4" /> Returns & Exchange</Link>
-            </div>
           </nav>
-          <div className="border-t border-border p-5 text-xs text-muted-foreground space-y-1">
-            <p className="flex items-center gap-2"><Phone className="h-3.5 w-3.5" /> +92 300 1234567</p>
-            <p>PK | English · Prices in PKR</p>
+          <div className="border-t border-[#e8e0d0] p-5 text-xs text-[#6b6b6b]">
+            <p>24 Heritage Avenue, Hyderabad</p>
+            <p className="mt-1">+91 98 4500 1962</p>
           </div>
         </aside>
       </div>

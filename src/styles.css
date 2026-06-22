@@ -7,65 +7,75 @@
 @theme inline {
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: "Inter", system-ui, sans-serif;
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-blush: var(--blush);
-  --color-gold: var(--gold);
+  --color-gold: #d4af37;
+  --color-gold-dark: #b8962e;
+  --color-gold-light: #f0d68a;
+  --color-cream: #faf6f0;
+  --color-dark: #1a1a2e;
+  --color-dark2: #16213e;
+  --color-border: #e8e0d0;
+  --color-text-light: #6b6b6b;
+  --color-bg-white: #ffffff;
 }
 
 :root {
-  --radius: 0.25rem;
-  --background: oklch(0.99 0.005 30);
-  --foreground: oklch(0.18 0.02 30);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 30);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 30);
-  --primary: oklch(0.22 0.02 30);
-  --primary-foreground: oklch(0.99 0.005 30);
-  --secondary: oklch(0.96 0.015 25);
-  --secondary-foreground: oklch(0.22 0.02 30);
-  --muted: oklch(0.96 0.01 30);
-  --muted-foreground: oklch(0.5 0.02 30);
-  --accent: oklch(0.92 0.05 20);
-  --accent-foreground: oklch(0.22 0.02 30);
-  --destructive: oklch(0.55 0.22 27);
-  --destructive-foreground: oklch(0.99 0.005 30);
-  --border: oklch(0.9 0.01 30);
-  --input: oklch(0.9 0.01 30);
-  --ring: oklch(0.7 0.05 25);
-  --blush: oklch(0.93 0.04 20);
-  --gold: oklch(0.75 0.12 80);
+  --gold: #d4af37;
+  --gold-dark: #b8962e;
+  --gold-light: #f0d68a;
+  --cream: #faf6f0;
+  --dark: #1a1a2e;
+  --dark2: #16213e;
 }
 
-@layer base {
-  * { border-color: var(--color-border); }
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-family: var(--font-sans);
-    font-feature-settings: "ss01";
-  }
-  h1, h2, h3, .serif { font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.01em; }
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: #2c2c2c;
+  background: #ffffff;
+}
+
+h1, h2, h3, h4, .serif {
+  font-family: var(--font-serif);
+}
+
+.btn-primary-custom {
+  display: inline-block;
+  padding: 14px 32px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  background: var(--gold);
+  color: #ffffff;
+}
+
+.btn-primary-custom:hover {
+  background: var(--gold-dark);
+}
+
+.btn-outline-custom {
+  display: inline-block;
+  padding: 14px 32px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid #ffffff;
+  background: transparent;
+  color: #ffffff;
+}
+
+.btn-outline-custom:hover {
+  background: #ffffff;
+  color: #1a1a2e;
 }

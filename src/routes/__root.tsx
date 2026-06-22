@@ -14,11 +14,11 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center bg-white px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl">404</h1>
-        <p className="mt-4 text-muted-foreground">Yeh page mojood nahi.</p>
-        <Link to="/" className="mt-6 inline-block underline">Wapas Home</Link>
+        <h1 className="text-7xl font-serif">404</h1>
+        <p className="mt-4 text-[#6b6b6b]">Page not found</p>
+        <Link to="/" className="mt-6 inline-block underline">Return Home</Link>
       </div>
     </div>
   );
@@ -28,10 +28,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
   useEffect(() => { reportLovableError(error, { boundary: "tanstack_root_error_component" }); }, [error]);
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center bg-white px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-2xl">Kuch ghalat ho gaya</h1>
-        <button onClick={() => { router.invalidate(); reset(); }} className="mt-6 bg-primary text-primary-foreground px-4 py-2">Try again</button>
+        <h1 className="text-2xl font-serif">Something went wrong</h1>
+        <button onClick={() => { router.invalidate(); reset(); }} className="mt-6 bg-[#d4af37] text-white px-4 py-2">Try again</button>
       </div>
     </div>
   );
@@ -42,22 +42,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Sparkle Pakistan — Crystal Jewelry & Gifts" },
-      { name: "description", content: "Premium crystal jewelry, watches & home décor with prices in PKR. Free shipping across Pakistan." },
-      { property: "og:title", content: "Sparkle Pakistan — Crystal Jewelry & Gifts" },
-      { property: "og:description", content: "Premium crystal jewelry, watches & home décor with prices in PKR. Free shipping across Pakistan." },
+      { title: "Mazhar Jeweller — Heirlooms forged in gold & light" },
+      { name: "description", content: "Three generations of master craftsmanship. Discover diamond and gold jewellery handcrafted in Hyderabad, India." },
+      { property: "og:title", content: "Mazhar Jeweller — Heirlooms forged in gold & light" },
+      { property: "og:description", content: "Three generations of master craftsmanship. Discover diamond and gold jewellery handcrafted in Hyderabad, India." },
       { property: "og:type", content: "website" },
-      { name: "twitter:title", content: "Sparkle Pakistan — Crystal Jewelry & Gifts" },
-      { name: "twitter:description", content: "Premium crystal jewelry, watches & home décor with prices in PKR. Free shipping across Pakistan." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/defd23c4-ccad-44f5-aabf-4cb4d474e7e4/id-preview-6dfc19c8--db8fc734-b15f-49f4-93d2-39967fca1e31.lovable.app-1782158011403.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/defd23c4-ccad-44f5-aabf-4cb4d474e7e4/id-preview-6dfc19c8--db8fc734-b15f-49f4-93d2-39967fca1e31.lovable.app-1782158011403.png" },
+      { name: "twitter:title", content: "Mazhar Jeweller — Heirlooms forged in gold & light" },
+      { name: "twitter:description", content: "Three generations of master craftsmanship. Discover diamond and gold jewellery handcrafted in Hyderabad, India." },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" },
     ],
   }),
   shellComponent: RootShell,
