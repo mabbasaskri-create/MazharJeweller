@@ -716,7 +716,7 @@ renderProductScroll('scroll-earrings', getProductsByCategory('earrings'));
 renderProductScroll('scroll-rings', getProductsByCategory('rings'));
 renderProductScroll('scroll-bracelets', getProductsByCategory('bracelets'));
 renderProductScroll('scroll-gemstones', getProductsByCategory('gemstones'));
-renderProductScroll('scroll-best', getStoreProducts());
+renderProductScroll('scroll-best', getStoreProducts().filter(function(p) { return p.loved; }));
 renderCollections('collectionsWrap');
 </script>
 <script src="nav-auth.js"></script>

@@ -232,7 +232,7 @@ tr:hover td{background:#faf8f4}
         </div>
         <div class="card-body">
           <table>
-            <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Badge</th><th>Sale</th><th>Action</th></tr></thead>
+            <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Badge</th><th>Sale</th><th>Variants</th><th>Loved</th><th>Action</th></tr></thead>
             <tbody id="productsBody"></tbody>
           </table>
         </div>
@@ -288,6 +288,20 @@ tr:hover td{background:#faf8f4}
               <select id="prodCollection" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none">
                 <option value="">None</option>
               </select>
+            </div>
+            <div>
+              <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Sizes (comma-separated)</label>
+              <input id="prodSizes" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="e.g. S, M, L, XL">
+            </div>
+            <div>
+              <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Colors (comma-separated)</label>
+              <input id="prodColors" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="e.g. Gold, Silver, Rose Gold">
+            </div>
+            <div style="grid-column:span 2">
+              <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Most Loved Jewellery</label>
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 0;font-size:12px;color:var(--mid);user-select:none">
+                <input id="prodLoved" type="checkbox" style="width:16px;height:16px;cursor:pointer;accent-color:var(--gold)"> Show in "Most Loved Jewellery" section
+              </label>
             </div>
             <div style="grid-column:span 2">
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Description (optional)</label>
@@ -595,6 +609,12 @@ function renderProducts() {
       '<td>' + priceHtml + '</td>' +
       '<td>' + badgeHtml + '</td>' +
       '<td>' + (p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) + '% off' : '-') + '</td>' +
+      '<td style="font-size:10px">' +
+        (p.sizes && p.sizes.length ? '<div style="color:var(--mid)">Sizes: ' + p.sizes.join(', ') + '</div>' : '') +
+        (p.colors && p.colors.length ? '<div style="color:var(--muted)">Colors: ' + p.colors.join(', ') + '</div>' : '') +
+        (!p.sizes || !p.sizes.length && !p.colors || !p.colors.length ? '-' : '') +
+      '</td>' +
+      '<td style="font-size:16px;text-align:center">' + (p.loved ? '❤️' : '♡') + '</td>' +
       '<td><button class="action" onclick="editProduct(\'' + p.id + '\')" style="font-size:10px;letter-spacing:1px;color:var(--blue);border:none;background:none;cursor:pointer;font-family:\'Inter\',sans-serif">Edit</button> <button class="action" onclick="deleteProduct(\'' + p.id + '\')" style="font-size:10px;letter-spacing:1px;color:var(--red);border:none;background:none;cursor:pointer;font-family:\'Inter\',sans-serif">Delete</button></td>' +
       '</tr>';
   }).join('');
@@ -624,6 +644,9 @@ function showAddProduct() {
   document.getElementById('prodImageFile').value = '';
   document.getElementById('prodImageStatus').textContent = '';
   document.getElementById('prodCollection').value = '';
+  document.getElementById('prodSizes').value = '';
+  document.getElementById('prodColors').value = '';
+  document.getElementById('prodLoved').checked = false;
   document.getElementById('prodDescription').value = '';
   window._uploadedImages = [];
   renderImagePreview();
@@ -645,6 +668,9 @@ function editProduct(id) {
   document.getElementById('prodImageFile').value = '';
   document.getElementById('prodImageStatus').textContent = '';
   document.getElementById('prodCollection').value = p.collection || '';
+  document.getElementById('prodSizes').value = p.sizes ? p.sizes.join(', ') : '';
+  document.getElementById('prodColors').value = p.colors ? p.colors.join(', ') : '';
+  document.getElementById('prodLoved').checked = p.loved ? true : false;
   document.getElementById('prodDescription').value = p.description || '';
   window._uploadedImages = [];
   try {
@@ -672,6 +698,9 @@ function saveProduct() {
   var badge = document.getElementById('prodBadge').value;
   var image = document.getElementById('prodImage').value.trim();
   var collection = document.getElementById('prodCollection').value.trim();
+  var sizes = document.getElementById('prodSizes').value.trim().split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s; });
+  var colors = document.getElementById('prodColors').value.trim().split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s; });
+  var loved = document.getElementById('prodLoved').checked;
   var description = document.getElementById('prodDescription').value.trim();
 
   if (!name || !price) {
@@ -693,6 +722,9 @@ function saveProduct() {
       p.badge = badge;
       p.image = image || p.image;
       p.collection = collection;
+      p.sizes = sizes;
+      p.colors = colors;
+      p.loved = loved;
       p.description = description;
       if (typeof fbSaveProduct === 'function') fbSaveProduct(p).catch(function() {});
       saveProductPhotos(p.id, urls);
@@ -707,6 +739,9 @@ function saveProduct() {
       badge: badge,
       image: image,
       collection: collection,
+      sizes: sizes,
+      colors: colors,
+      loved: loved,
       description: description
     };
     products.push(newProduct);

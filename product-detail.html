@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Detail | Mazhar Jewellers</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --black:#0a0a0a;
+  --white:#fdfcf8;
+  --gold:#b8965a;
+  --gold-light:#d4b07a;
+  --gold-pale:#f5ede0;
+  --charcoal:#1a1a1a;
+  --mid:#3a3a3a;
+  --muted:#888;
+  --border:#e8e0d4;
+  --red:#c0392b;
+  --green:#22c55e;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;width:100%;height:100%;object-fit:cover}
+
+.topbar{background:var(--black);color:var(--white);text-align:center;font-size:11px;letter-spacing:1.8px;padding:10px 1rem;font-weight:300;line-height:1.5}
+.topbar span{color:var(--gold-light)}
+
+nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
+.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:64px}
+.logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;letter-spacing:3px;white-space:nowrap}
+.logo em{color:var(--gold);font-style:normal}
+.nav-links{display:flex;gap:1.2rem;list-style:none}
+.nav-links a{font-size:11px;letter-spacing:2px;color:var(--mid);text-transform:uppercase;transition:color .2s;white-space:nowrap}
+.nav-links a:hover{color:var(--gold)}
+.nav-icons{display:flex;gap:1rem;align-items:center}
+.nav-icon-btn{background:none;border:none;cursor:pointer;font-size:20px;color:var(--mid);transition:color .2s;padding:4px;line-height:1}
+.nav-icon-btn:hover{color:var(--gold)}
+.cart-btn{background:var(--black)!important;color:var(--white)!important;padding:8px 16px;font-size:10px;letter-spacing:2px;font-family:'Inter',sans-serif;border:none;cursor:pointer}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--black);transition:all .3s}
+
+.mobile-menu{display:none;position:fixed;inset:0;background:var(--white);z-index:300;padding:5rem 2rem 2rem;flex-direction:column;gap:0}
+.mobile-menu.open{display:flex}
+.mobile-menu-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;font-size:28px;cursor:pointer;color:var(--black)}
+.mobile-menu a{font-size:24px;font-family:'Cormorant Garamond',serif;color:var(--black);padding:1rem 0;border-bottom:1px solid var(--border);display:block}
+.mobile-menu a:last-child{border-bottom:none}
+
+.product-wrap{max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem}
+
+/* Gallery */
+.gallery{position:sticky;top:90px;align-self:start}
+.gallery-main{aspect-ratio:1;background:#f5f0ea;border:1px solid var(--border);overflow:hidden;position:relative;margin-bottom:12px}
+.gallery-main img{object-fit:contain;transition:opacity .3s}
+.gallery-thumbs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.gallery-thumbs .thumb{width:72px;height:72px;border:2px solid var(--border);cursor:pointer;flex-shrink:0;overflow:hidden;transition:border-color .2s;background:#f5f0ea}
+.gallery-thumbs .thumb:hover,.gallery-thumbs .thumb.active{border-color:var(--gold)}
+.gallery-thumbs .thumb img{object-fit:cover}
+
+/* Product info */
+.breadcrumb{font-size:11px;color:var(--muted);margin-bottom:1.5rem}
+.breadcrumb a{color:var(--muted);transition:color .2s}
+.breadcrumb a:hover{color:var(--gold)}
+.breadcrumb span{color:var(--mid)}
+
+.prod-collection{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.prod-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin-bottom:.75rem;line-height:1.2}
+.prod-badge{display:inline-block;font-size:9px;letter-spacing:2px;padding:4px 8px;text-transform:uppercase;margin-bottom:1rem}
+.b-new{background:var(--black);color:var(--white)}
+.b-sale{background:var(--red);color:var(--white)}
+.b-best{background:var(--gold);color:var(--white)}
+.prod-price-row{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;flex-wrap:wrap}
+.p-now{font-size:24px;font-weight:500;color:var(--black)}
+.p-old{font-size:16px;color:var(--muted);text-decoration:line-through}
+.p-off{font-size:12px;color:var(--red);font-weight:500}
+.p-off-badge{background:var(--red);color:var(--white);font-size:10px;padding:2px 8px;border-radius:3px}
+
+.prod-desc{font-size:13px;color:var(--mid);line-height:1.8;margin-bottom:1.5rem;border-top:1px solid var(--border);padding-top:1.25rem}
+
+/* Size picker */
+.variant-section{margin-bottom:1.25rem}
+.variant-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;display:block}
+.variant-label em{font-style:normal;color:var(--mid);font-weight:500}
+.size-options,.color-options{display:flex;gap:8px;flex-wrap:wrap}
+.size-btn{min-width:44px;height:44px;border:1px solid var(--border);background:var(--white);font-family:'Inter',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;color:var(--mid);padding:0 14px}
+.size-btn:hover{border-color:var(--gold);color:var(--gold)}
+.size-btn.active{border-color:var(--black);background:var(--black);color:var(--white)}
+.color-btn{width:36px;height:36px;border-radius:50%;border:2px solid var(--border);cursor:pointer;transition:all .2s;position:relative}
+.color-btn:hover{border-color:var(--gold);transform:scale(1.1)}
+.color-btn.active{border-color:var(--black);transform:scale(1.1);box-shadow:0 0 0 2px var(--white),0 0 0 4px var(--black)}
+.color-btn .color-tip{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:8px;color:var(--muted);white-space:nowrap;display:none}
+.color-btn:hover .color-tip{display:block}
+
+/* Cart */
+.cart-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.qty-selector{display:flex;border:1px solid var(--border);align-items:center}
+.qty-btn{width:40px;height:44px;border:none;background:var(--white);font-size:16px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--mid);transition:background .2s}
+.qty-btn:hover{background:var(--gold-pale)}
+.qty-val{width:44px;text-align:center;font-size:14px;font-weight:500}
+.add-cart-btn{flex:1;min-width:180px;background:var(--black);color:var(--white);border:none;padding:0 32px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;height:44px}
+.add-cart-btn:hover{background:var(--charcoal)}
+.wish-btn{width:44px;height:44px;border:1px solid var(--border);background:var(--white);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--mid)}
+.wish-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* Features */
+.prod-features{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.prod-feat{font-size:11px;color:var(--mid);line-height:1.5}
+.prod-feat strong{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--black);margin-bottom:2px}
+
+/* Loading/Error */
+.loading{text-align:center;padding:4rem 1rem;color:var(--muted);font-size:14px}
+.error-page{text-align:center;padding:5rem 1rem}
+.error-page .icon{font-size:48px;margin-bottom:1rem}
+.error-page h2{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;margin-bottom:.5rem}
+.error-page p{font-size:13px;color:var(--muted);margin-bottom:1.5rem}
+.error-page .btn{display:inline-block;background:var(--gold);color:var(--white);padding:12px 28px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Inter',sans-serif}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--black);color:var(--white);padding:12px 24px;font-size:12px;letter-spacing:1px;border-radius:4px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center}
+.toast.show{opacity:1}
+
+footer{background:#080808;color:rgba(255,255,255,.45);padding:3rem 1.5rem 2rem;margin-top:4rem}
+.footer-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:10px;color:rgba(255,255,255,.25)}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;letter-spacing:2px;color:var(--white)}
+.footer-logo em{color:var(--gold);font-style:normal}
+
+@media(max-width:900px){
+  .product-wrap{grid-template-columns:1fr;gap:2rem;padding:1.5rem 1.25rem}
+  .gallery{position:static}
+  .gallery-main{aspect-ratio:3/4}
+  .prod-name{font-size:22px}
+  .p-now{font-size:20px}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .cart-btn{display:none}
+}
+@media(max-width:600px){
+  .topbar{font-size:9px;letter-spacing:1px;padding:8px .75rem}
+  .nav-inner{padding:0 1rem;height:58px}
+  .logo{font-size:20px;letter-spacing:2px}
+  .product-wrap{padding:1.25rem 1rem;gap:1.5rem}
+  .prod-features{grid-template-columns:1fr}
+  .cart-actions{flex-direction:column}
+  .add-cart-btn{width:100%}
+  .qty-selector{width:fit-content}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  SHAN-E-RAMADAN SALE &nbsp;<span>UP TO 40% OFF</span>&nbsp; · &nbsp;FREE DELIVERY OVER RS. 5,000 &nbsp;·&nbsp; COD AVAILABLE
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">MAZHAR <em>JEWELLERS</em></a>
+    <ul class="nav-links">
+      <li><a href="home.html">HOME</a></li>
+      <li><a href="necklaces.html">NECKLACES</a></li>
+      <li><a href="earrings.html">EARRINGS</a></li>
+      <li><a href="rings.html">RINGS</a></li>
+      <li><a href="bracelets.html">BRACELETS</a></li>
+      <li><a href="gemstones.html">GEMSTONES</a></li>
+    </ul>
+    <div class="nav-icons">
+      <button class="nav-icon-btn" aria-label="Search">🔍</button>
+      <button class="nav-icon-btn" aria-label="Wishlist">♡</button>
+      <button class="nav-icon-btn" aria-label="Account" onclick="location.href='login.html'">👤</button>
+      <button class="nav-icon-btn cart-btn">🛍 CART</button>
+      <button class="hamburger" aria-label="Menu" onclick="document.getElementById('mobileMenu').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="document.getElementById('mobileMenu').classList.remove('open')">✕</button>
+  <a href="home.html">Home</a>
+  <a href="necklaces.html">Necklaces</a>
+  <a href="earrings.html">Earrings</a>
+  <a href="rings.html">Rings</a>
+  <a href="bracelets.html">Bracelets</a>
+  <a href="gemstones.html">GemStones</a>
+</div>
+
+<div id="pageContent"></div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">MAZHAR <em>JEWELLERS</em></span>
+    <p class="footer-copy">© 2025 Mazhar Jewellers. Tamam haqooq mahfooz hain.</p>
+  </div>
+</footer>
+
+<script>
+function formatPrice(amount) {
+  return 'PKR ' + Number(amount).toLocaleString('en-PK');
+}
+
+var COLORS_MAP = {
+  'gold': '#D4AF37', 'silver': '#C0C0C0', 'rose gold': '#E8A2A2',
+  'black': '#1A1A1A', 'white': '#F5F5F5', 'rhodium': '#E0E0E0',
+  'platinum': '#E5E4E2', 'copper': '#B87333', 'bronze': '#CD7F32'
+};
+
+function getColorHex(name) {
+  return COLORS_MAP[name.toLowerCase().trim()] || '#B8965A';
+}
+
+var product = null;
+var productPhotos = [];
+var selectedSize = '';
+var selectedColor = '';
+var quantity = 1;
+
+function init() {
+  var params = new URLSearchParams(window.location.search);
+  var id = params.get('id');
+  if (!id) { renderError('No product ID specified.'); return; }
+  if (typeof getProductById === 'function') {
+    product = getProductById(id);
+    if (!product) {
+      if (typeof fbGetProducts === 'function') {
+        fbGetProducts().then(function(list) {
+          product = list.find(function(p) { return p.id === id; }) || null;
+          if (!product) { renderError('Product not found.'); return; }
+          loadPhotos();
+        }).catch(function() { renderError('Could not load product.'); });
+      } else { renderError('Product not found.'); }
+      return;
+    }
+    loadPhotos();
+  } else { renderError('Store not available.'); }
+}
+
+function loadPhotos() {
+  if (typeof fbGetProductPhotos === 'function') {
+    fbGetProductPhotos(product.id).then(function(urls) {
+      productPhotos = (urls && urls.length > 0) ? urls : [];
+      renderProduct();
+      checkPhotosFromStorage();
+    }).catch(function() { renderProduct(); });
+  } else { renderProduct(); }
+}
+
+function checkPhotosFromStorage() {
+  try {
+    var stored = localStorage.getItem('mjPhotos_' + product.id);
+    if (stored) {
+      var urls = JSON.parse(stored);
+      if (urls && urls.length > productPhotos.length) {
+        productPhotos = urls;
+        renderProduct();
+      }
+    }
+  } catch(e) {}
+}
+
+function badgeClass(badge) {
+  if (!badge) return '';
+  var b = badge.toUpperCase();
+  if (b.indexOf('BEST') >= 0 || b.indexOf('GIFT') >= 0) return 'b-best';
+  if (b.indexOf('SALE') >= 0) return 'b-sale';
+  return 'b-new';
+}
+
+function renderProduct() {
+  var p = product;
+  var allImages = [];
+  if (productPhotos && productPhotos.length > 0) {
+    allImages = productPhotos;
+  }
+  if (allImages.length === 0 && p.image) allImages.push(p.image);
+
+  var badgeHtml = p.badge ? '<span class="prod-badge ' + badgeClass(p.badge) + '">' + p.badge + '</span>' : '';
+  var priceHtml = '<span class="p-now">' + formatPrice(p.price) + '</span>';
+  if (p.oldPrice) {
+    var off = Math.round((1 - p.price / p.oldPrice) * 100);
+    priceHtml += ' <span class="p-old">' + formatPrice(p.oldPrice) + '</span>';
+    priceHtml += ' <span class="p-off-badge">-' + off + '%</span>';
+  }
+
+  var catMap = { necklaces: 'necklaces.html', earrings: 'earrings.html', rings: 'rings.html', bracelets: 'bracelets.html', gemstones: 'gemstones.html' };
+  var catLink = catMap[p.category] || '#';
+
+  var thumbHtml = allImages.map(function(url, i) {
+    return '<div class="thumb' + (i === 0 ? ' active' : '') + '" onclick="switchImage(' + i + ')"><img src="' + url + '" alt=""></div>';
+  }).join('');
+
+  var sizeHtml = '';
+  if (p.sizes && p.sizes.length > 0) {
+    if (!selectedSize) selectedSize = p.sizes[0];
+    sizeHtml = '<div class="variant-section">' +
+      '<span class="variant-label">Size: <em id="sizeLabel">' + selectedSize + '</em></span>' +
+      '<div class="size-options">' + p.sizes.map(function(s) {
+        return '<button class="size-btn' + (s === selectedSize ? ' active' : '') + '" onclick="selectSize(\'' + s + '\')">' + s + '</button>';
+      }).join('') + '</div></div>';
+  }
+
+  var colorHtml = '';
+  if (p.colors && p.colors.length > 0) {
+    if (!selectedColor) selectedColor = p.colors[0];
+    colorHtml = '<div class="variant-section">' +
+      '<span class="variant-label">Color: <em id="colorLabel">' + selectedColor + '</em></span>' +
+      '<div class="color-options">' + p.colors.map(function(c) {
+        var hex = getColorHex(c);
+        return '<button class="color-btn' + (c === selectedColor ? ' active' : '') + '" onclick="selectColor(\'' + c + '\', \'' + hex + '\')" style="background:' + hex + '" title="' + c + '"><span class="color-tip">' + c + '</span></button>';
+      }).join('') + '</div></div>';
+  }
+
+  var catName = p.category ? p.category.charAt(0).toUpperCase() + p.category.slice(1) : '';
+
+  var html = '<div class="product-wrap">' +
+    '<div class="gallery">' +
+      '<div class="gallery-main" id="galleryMain"><img src="' + allImages[0] + '" alt="' + p.name.replace(/"/g, '&quot;') + '" id="mainImage"></div>' +
+      (allImages.length > 1 ? '<div class="gallery-thumbs">' + thumbHtml + '</div>' : '') +
+    '</div>' +
+    '<div class="info">' +
+      '<div class="breadcrumb"><a href="index.html">Home</a> / <a href="' + catLink + '">' + catName + '</a> / <span>' + p.name + '</span></div>' +
+      (p.collection ? '<p class="prod-collection">' + p.collection + '</p>' : '') +
+      '<h1 class="prod-name">' + p.name + '</h1>' +
+      badgeHtml +
+      '<div class="prod-price-row">' + priceHtml + '</div>' +
+      (p.description ? '<div class="prod-desc">' + p.description + '</div>' : '') +
+      sizeHtml +
+      colorHtml +
+      '<div class="cart-actions">' +
+        '<div class="qty-selector">' +
+          '<button class="qty-btn" onclick="changeQty(-1)">−</button>' +
+          '<span class="qty-val" id="qtyVal">1</span>' +
+          '<button class="qty-btn" onclick="changeQty(1)">+</button>' +
+        '</div>' +
+        '<button class="add-cart-btn" onclick="addToCart()">Add to Cart</button>' +
+        '<button class="wish-btn" onclick="toggleWish()">♡</button>' +
+      '</div>' +
+      '<div class="prod-features">' +
+        '<div class="prod-feat"><strong>🚚 Free Delivery</strong>PKR 5,000+ par free delivery</div>' +
+        '<div class="prod-feat"><strong>💳 Easy Payments</strong>COD, JazzCash, HBL Installments</div>' +
+        '<div class="prod-feat"><strong>🔄 30-Din Return</strong>Koi sawaal nahi, 30 dino mein wapis</div>' +
+        '<div class="prod-feat"><strong>🛡️ Authentic</strong>Premium quality, certificate available</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  document.getElementById('pageContent').innerHTML = html;
+}
+
+function switchImage(index) {
+  var main = document.getElementById('mainImage');
+  var thumbs = document.querySelectorAll('.thumb');
+  if (!main || !thumbs.length) return;
+  main.style.opacity = '0';
+  setTimeout(function() {
+    var imgs = [];
+    if (productPhotos && productPhotos.length > 0) imgs = productPhotos;
+    if (imgs.length === 0 && product.image) imgs.push(product.image);
+    if (imgs[index]) main.src = imgs[index];
+    main.style.opacity = '1';
+  }, 150);
+  thumbs.forEach(function(t, i) { t.classList.toggle('active', i === index); });
+}
+
+function selectSize(size) {
+  selectedSize = size;
+  document.querySelectorAll('.size-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent === size);
+  });
+  var lbl = document.getElementById('sizeLabel');
+  if (lbl) lbl.textContent = size;
+}
+
+function selectColor(color, hex) {
+  selectedColor = color;
+  document.querySelectorAll('.color-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.title === color);
+  });
+  var lbl = document.getElementById('colorLabel');
+  if (lbl) lbl.textContent = color;
+}
+
+function changeQty(delta) {
+  quantity = Math.max(1, Math.min(10, quantity + delta));
+  document.getElementById('qtyVal').textContent = quantity;
+}
+
+function addToCart() {
+  var p = product;
+  if (!p) return;
+  var cart = [];
+  try {
+    var stored = localStorage.getItem('mjCart');
+    if (stored) cart = JSON.parse(stored);
+  } catch(e) {}
+  var item = {
+    id: p.id,
+    name: p.name,
+    price: p.price,
+    image: p.image,
+    size: selectedSize,
+    color: selectedColor,
+    qty: quantity
+  };
+  var existing = cart.findIndex(function(x) { return x.id === item.id && x.size === item.size && x.color === item.color; });
+  if (existing >= 0) {
+    cart[existing].qty += item.qty;
+  } else {
+    cart.push(item);
+  }
+  try { localStorage.setItem('mjCart', JSON.stringify(cart)); } catch(e) {}
+  showToast('Added to cart ✓');
+  quantity = 1;
+  document.getElementById('qtyVal').textContent = '1';
+}
+
+function toggleWish() {
+  var p = product;
+  if (!p) return;
+  var wish = [];
+  try {
+    var stored = localStorage.getItem('mjWish');
+    if (stored) wish = JSON.parse(stored);
+  } catch(e) {}
+  var idx = wish.indexOf(p.id);
+  if (idx >= 0) { wish.splice(idx, 1); showToast('Removed from wishlist'); }
+  else { wish.push(p.id); showToast('Added to wishlist ♡'); }
+  try { localStorage.setItem('mjWish', JSON.stringify(wish)); } catch(e) {}
+}
+
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(function() { el.classList.remove('show'); }, 2000);
+}
+
+function renderError(msg) {
+  document.getElementById('pageContent').innerHTML = '<div class="error-page"><div class="icon">💎</div><h2>Product not found</h2><p>' + msg + '</p><a href="index.html" class="btn">Back to Store</a></div>';
+}
+
+init();
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="store-data.js"></script>
+<script src="nav-auth.js"></script>
+</body>
+</html>
