@@ -122,43 +122,96 @@ function syncFromFirestore(callback) {
 }
 
 // ===== COLLECTIONS =====
+var COLLECTION_DEFAULTS = [
+  { id: 'c1', name: 'Necklaces', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&q=80', link: 'necklaces.html' },
+  { id: 'c2', name: 'Earrings', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&q=80', link: 'earrings.html' },
+  { id: 'c3', name: 'Rings', image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&q=80', link: 'rings.html' },
+  { id: 'c4', name: 'Bracelets', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&q=80', link: 'bracelets.html' },
+  { id: 'c5', name: 'GemStones', image: 'https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=500&q=80', link: 'gemstones.html' }
+];
+
 function getCollections() {
   var stored = localStorage.getItem('mjCollections');
+  var list = null;
   if (stored) {
     try {
       var parsed = JSON.parse(stored);
-      if (parsed && parsed.length > 0) return parsed;
+      if (parsed && parsed.length > 0) list = parsed;
     } catch(e) {}
   }
-  return [
-    { name: 'Necklaces', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&q=80', link: 'necklaces.html' },
-    { name: 'Earrings', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&q=80', link: 'earrings.html' },
-    { name: 'Rings', image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&q=80', link: 'rings.html' },
-    { name: 'Bracelets', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&q=80', link: 'bracelets.html' },
-    { name: 'GemStones', image: 'https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=500&q=80', link: 'gemstones.html' }
-  ];
+  if (!list) return COLLECTION_DEFAULTS.slice();
+  return COLLECTION_DEFAULTS.map(function(def) {
+    var found = list.find(function(c) {
+      return (c.id && c.id === def.id) || c.link === def.link || c.name === def.name;
+    });
+    if (!found) return def;
+    return {
+      id: found.id || def.id,
+      name: found.name || def.name,
+      image: found.image || def.image,
+      link: found.link || def.link
+    };
+  });
+}
+
+function ensureCollectionsContainer() {
+  var container = document.getElementById('scroll-collections');
+  if (container) return container;
+  var wrap = document.getElementById('collectionsWrap');
+  if (!wrap || wrap.querySelector('.h-scroll')) return null;
+  wrap.innerHTML = '<div class="h-scroll" id="scroll-collections"></div>' +
+    '<button class="h-scroll-btn prev" aria-label="Previous">‹</button>' +
+    '<button class="h-scroll-btn next" aria-label="Next">›</button>';
+  return document.getElementById('scroll-collections');
 }
 
 function renderCollections() {
-  var container = document.getElementById('scroll-collections');
+  var container = ensureCollectionsContainer();
   if (!container) return;
   var cols = getCollections();
+  var products = getStoreProducts();
   container.innerHTML = cols.map(function(c) {
+    var cat = (c.link || '').replace('.html', '');
+    var count = products.filter(function(p) { return p.category === cat; }).length;
+    var countHtml = count > 0 ? count + ' items' : '';
     return '<a href="' + c.link + '" class="cat-card2 h-scroll-item">' +
-      '<img src="' + c.image + '" alt="' + c.name + '" loading="lazy">' +
+      '<img src="' + c.image + '" alt="' + c.name.replace(/"/g, '&quot;') + '" loading="lazy">' +
       '<div class="cat-grad"></div>' +
       '<span class="cat-label">' + c.name + '</span>' +
-      '<span class="cat-count"></span>' +
+      (countHtml ? '<span class="cat-count">' + countHtml + '</span>' : '') +
       '</a>';
   }).join('');
 }
 
+function syncCollectionsFromFirestore(callback) {
+  if (typeof fbGetCollections !== 'function') {
+    if (callback) callback();
+    return;
+  }
+  fbGetCollections().then(function(list) {
+    if (list && list.length > 0) {
+      try { localStorage.setItem('mjCollections', JSON.stringify(list)); } catch(e) {}
+    }
+    if (callback) callback();
+  }).catch(function() {
+    if (callback) callback();
+  });
+}
+
 (function initStore() {
   reRenderAll();
+  var pending = 0;
+  function done() {
+    pending--;
+    if (pending <= 0) reRenderAll();
+  }
   if (typeof fbGetProducts === 'function') {
-    syncFromFirestore(function() {
-      reRenderAll();
-    });
+    pending++;
+    syncFromFirestore(done);
+  }
+  if (typeof fbGetCollections === 'function') {
+    pending++;
+    syncCollectionsFromFirestore(done);
   }
 })();
 
