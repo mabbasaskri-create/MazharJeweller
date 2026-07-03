@@ -192,106 +192,7 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem}
     <h1 class="sec-title">Earrings Collection</h1>
     <p class="sec-sub">98+ designs — har style ke liye perfect pair</p>
   </div>
-  <div class="products-grid">
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <span class="prod-badge b-best">BEST SELLER</span>
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80" alt="Drop Earrings">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Gema Collection</p>
-      <p class="prod-name">Oval Crystal Drop Earrings, Gold Tone</p>
-      <div class="prod-price"><span class="p-now">PKR 8,900</span></div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <span class="prod-badge b-new">NEW IN</span>
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=600&q=80" alt="Stud Earrings">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Florere Collection</p>
-      <p class="prod-name">Flower Crystal Stud Earrings, Silver Tone</p>
-      <div class="prod-price"><span class="p-now">PKR 6,500</span></div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80" alt="Hoop Earrings">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Lumina Collection</p>
-      <p class="prod-name">Crystal Hoop Earrings, Gold Plated</p>
-      <div class="prod-price"><span class="p-now">PKR 9,200</span></div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <span class="prod-badge b-sale">SALE 15%</span>
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80" alt="Chandelier Earrings">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Regalia Collection</p>
-      <p class="prod-name">Crystal Chandelier Earrings, Rose Gold</p>
-      <div class="prod-price">
-        <span class="p-now">PKR 14,500</span>
-        <span class="p-old">PKR 17,000</span>
-        <span class="p-off">15% OFF</span>
-      </div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80" alt="Cluster Earrings">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Millenia Collection</p>
-      <p class="prod-name">Crystal Cluster Earrings, Silver Tone</p>
-      <div class="prod-price"><span class="p-now">PKR 11,800</span></div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <span class="prod-badge b-new">NEW IN</span>
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&q=80" alt="Tassel Earrings">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Bohemia Collection</p>
-      <p class="prod-name">Crystal Tassel Earrings, Multicolor</p>
-      <div class="prod-price"><span class="p-now">PKR 10,200</span></div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80" alt="Geometric Earrings">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Matrix Collection</p>
-      <p class="prod-name">Geometric Crystal Earrings, Gold Tone</p>
-      <div class="prod-price"><span class="p-now">PKR 7,800</span></div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <span class="prod-badge b-best">GIFT PICK</span>
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80" alt="Pearl Earrings">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Pearl Essence Collection</p>
-      <p class="prod-name">Crystal Pearl Stud Earrings, White Gold</p>
-      <div class="prod-price"><span class="p-now">PKR 5,900</span></div>
-    </div>
-
-  </div>
+  <div class="products-grid" id="productGrid"></div>
 </div>
 
 <div class="trust-bar">
@@ -400,6 +301,8 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem}
 <script>
 (function(){var p=window.location.pathname.split('/').pop()||'index.html';if(p==='index.html')p='home.html';document.querySelectorAll('.nav-links a').forEach(function(a){if(a.getAttribute('href')===p)a.classList.add('active')})})();
 </script>
+<script src="store-data.js"></script>
+<script>renderProductGrid('productGrid', getProductsByCategory('earrings'));</script>
 <script src="nav-auth.js"></script>
 </body>
 </html>

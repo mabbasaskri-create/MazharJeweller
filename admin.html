@@ -140,8 +140,11 @@ tr:hover td{background:#faf8f4}
     <div class="nav-item" data-tab="customers" onclick="switchTab('customers')">
       <span class="icon">👥</span> Customers
     </div>
-    <div class="nav-item" style="margin-top:auto;border-top:1px solid var(--border);padding-top:1rem" onclick="location.href='index.html'">
+    <div class="nav-item" onclick="location.href='index.html'" style="margin-top:auto">
       <span class="icon">←</span> Back to Store
+    </div>
+    <div class="nav-item" onclick="handleLogout()" style="border-top:1px solid var(--border);color:var(--red)">
+      <span class="icon">🚪</span> Logout
     </div>
   </div>
 
@@ -616,6 +619,11 @@ function renderCustomers() {
   tbody.innerHTML = list.map(function(c) {
     return '<tr><td><div style="font-weight:500;color:var(--black)">' + c.name + '</div></td><td style="font-size:11px;color:var(--muted)">' + c.email + '</td><td>' + c.orderCount + '</td><td>' + formatPrice(c.totalSpent) + '</td></tr>';
   }).join('');
+}
+
+function handleLogout() {
+  localStorage.removeItem('mjUser');
+  window.location.href = 'index.html';
 }
 
 function switchTab(tab) {

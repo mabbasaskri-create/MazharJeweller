@@ -192,110 +192,7 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem}
     <h1 class="sec-title">GemStones Collection</h1>
     <p class="sec-sub">50+ premium gemstones — every color with precious value</p>
   </div>
-  <div class="products-grid">
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <span class="prod-badge b-best">BEST SELLER</span>
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=600&q=80" alt="Amethyst Gemstone">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Amethyst Collection</p>
-      <p class="prod-name">Natural Amethyst Pendant, Silver Plated</p>
-      <div class="prod-price"><span class="p-now">PKR 14,900</span></div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <span class="prod-badge b-new">NEW IN</span>
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80" alt="Emerald Gemstone">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Emerald Collection</p>
-      <p class="prod-name">Green Emerald Stud Earrings, Gold Tone</p>
-      <div class="prod-price"><span class="p-now">PKR 18,500</span></div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <span class="prod-badge b-sale">SALE 25%</span>
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80" alt="Ruby Ring">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Ruby Collection</p>
-      <p class="prod-name">Natural Ruby Gemstone Ring, Rose Gold</p>
-      <div class="prod-price">
-        <span class="p-now">PKR 22,400</span>
-        <span class="p-old">PKR 29,900</span>
-        <span class="p-off">25% OFF</span>
-      </div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=600&q=80" alt="Sapphire Bracelet">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Sapphire Collection</p>
-      <p class="prod-name">Blue Sapphire Crystal Bracelet, Silver Tone</p>
-      <div class="prod-price"><span class="p-now">PKR 16,700</span></div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80" alt="Topaz Pendant">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Topaz Collection</p>
-      <p class="prod-name">Golden Topaz Pendant, Rhodium Plated</p>
-      <div class="prod-price"><span class="p-now">PKR 12,800</span></div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <span class="prod-badge b-new">NEW IN</span>
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=80" alt="Opal Necklace">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Opal Collection</p>
-      <p class="prod-name">Opal Crystal Necklace, Gold Tone</p>
-      <div class="prod-price"><span class="p-now">PKR 24,500</span></div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <span class="prod-badge b-sale">SALE 30%</span>
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1490367532201-b9bc1dc483f6?w=600&q=80" alt="Garnet Earrings">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Garnet Collection</p>
-      <p class="prod-name">Deep Garnet Drop Earrings, Silver Tone</p>
-      <div class="prod-price">
-        <span class="p-now">PKR 10,500</span>
-        <span class="p-old">PKR 15,000</span>
-        <span class="p-off">30% OFF</span>
-      </div>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-img">
-        <button class="prod-wish">♡</button>
-        <img src="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=600&q=80" alt="Citrine Ring">
-        <button class="prod-add">ADD TO CART</button>
-      </div>
-      <p class="prod-coll">Citrine Collection</p>
-      <p class="prod-name">Citrine Gemstone Ring, Rose Gold Plated</p>
-      <div class="prod-price"><span class="p-now">PKR 19,900</span></div>
-    </div>
-
-  </div>
+  <div class="products-grid" id="productGrid"></div>
 </div>
 
 <div class="trust-bar">
@@ -404,6 +301,8 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem}
 <script>
 (function(){var p=window.location.pathname.split('/').pop()||'index.html';if(p==='index.html')p='home.html';document.querySelectorAll('.nav-links a').forEach(function(a){if(a.getAttribute('href')===p)a.classList.add('active')})})();
 </script>
+<script src="store-data.js"></script>
+<script>renderProductGrid('productGrid', getProductsByCategory('gemstones'));</script>
 <script src="nav-auth.js"></script>
 </body>
 </html>
