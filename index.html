@@ -710,15 +710,6 @@ document.addEventListener('DOMContentLoaded',function(){
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="store-data.js"></script>
-<script>
-renderProductScroll('scroll-necklaces', getProductsByCategory('necklaces'));
-renderProductScroll('scroll-earrings', getProductsByCategory('earrings'));
-renderProductScroll('scroll-rings', getProductsByCategory('rings'));
-renderProductScroll('scroll-bracelets', getProductsByCategory('bracelets'));
-renderProductScroll('scroll-gemstones', getProductsByCategory('gemstones'));
-renderProductScroll('scroll-best', getStoreProducts().filter(function(p) { return p.loved; }));
-renderCollections('collectionsWrap');
-</script>
 <script src="nav-auth.js"></script>
 </body>
 </html>

@@ -334,48 +334,13 @@ tr:hover td{background:#faf8f4}
 
     <div id="tab-collections" style="display:none">
       <h1>Collections</h1>
-      <p class="sub">Manage product categories/collections shown on the homepage</p>
+      <p class="sub">Change images for homepage collections</p>
 
       <div class="section-card">
         <div class="card-hd">
-          <h2>All Collections</h2>
-          <button class="action" onclick="showAddCollection()">+ Add Collection</button>
+          <h2>Collection Images</h2>
         </div>
-        <div class="card-body">
-          <table>
-            <thead><tr><th>Image</th><th>Name</th><th>Link</th><th>Action</th></tr></thead>
-            <tbody id="collectionsBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="section-card" id="addCollectionCard" style="display:none">
-        <div class="card-hd">
-          <h2 id="collectionFormTitle">Add Collection</h2>
-          <button class="action" onclick="document.getElementById('addCollectionCard').style.display='none'">Cancel</button>
-        </div>
-        <div class="card-body" style="padding:1.25rem">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:500px">
-            <div style="grid-column:span 2">
-              <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Collection Name</label>
-              <input id="colName" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="e.g. Necklaces">
-            </div>
-            <div>
-              <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Link Page</label>
-              <input id="colLink" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="e.g. necklaces.html">
-            </div>
-            <div>
-              <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Order</label>
-              <input id="colOrder" type="number" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="1" value="1">
-            </div>
-            <div style="grid-column:span 2">
-              <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Image URL</label>
-              <input id="colImage" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="https://images.unsplash.com/...">
-            </div>
-            <div style="grid-column:span 2">
-              <button class="action" style="background:var(--gold);color:var(--white);padding:12px 28px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Inter',sans-serif" onclick="saveCollection()">Save Collection</button>
-            </div>
-          </div>
+        <div class="card-body" id="collectionImagesBody" style="padding:1.25rem">
         </div>
       </div>
     </div>
@@ -434,7 +399,7 @@ function loadData() {
     renderOrders();
     renderProducts();
     renderCustomers();
-    renderCollections();
+    renderCollectionImages();
   });
   loadSampleOrders();
   loadCollections();
@@ -442,35 +407,33 @@ function loadData() {
 
 function loadProductsFromFirestore(callback) {
   if (typeof fbGetProducts !== 'function') {
+    loadLocalProducts();
     if (callback) callback();
     return;
   }
   fbGetProducts().then(function(list) {
     if (list && list.length > 0) {
       products = list;
-      try { localStorage.setItem('mjProducts', JSON.stringify(products)); } catch(e) {}
     } else {
-      seedLocalProducts();
+      loadLocalProducts();
     }
+    try { localStorage.setItem('mjProducts', JSON.stringify(products)); } catch(e) {}
     if (callback) callback();
   }).catch(function() {
-    seedLocalProducts();
+    loadLocalProducts();
     if (callback) callback();
   });
 }
 
-function seedLocalProducts() {
-  products = [
-    { id: 'p1', name: 'Swan Pendant Necklace, Rhodium Plated', category: 'necklaces', collection: 'Idyllia Collection', price: 12500, oldPrice: null, badge: 'BEST SELLER', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=200&q=80', description: '' },
-    { id: 'p2', name: 'Star Choker Necklace, Rhodium Plated', category: 'necklaces', collection: 'Constella Collection', price: 15200, oldPrice: null, badge: '', image: 'https://images.unsplash.com/photo-1490367532201-b9bc1dc483f6?w=200&q=80', description: '' },
-    { id: 'p3', name: 'Crystal Pearl Necklace, Gold Tone', category: 'necklaces', collection: 'Pearl Essence Collection', price: 16800, oldPrice: null, badge: 'NEW IN', image: 'https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=200&q=80', description: '' },
-    { id: 'p4', name: 'Crystal Bib Necklace, Gold Plated', category: 'necklaces', collection: 'Regalia Collection', price: 28500, oldPrice: 35600, badge: 'SALE 20%', image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=200&q=80', description: '' },
-    { id: 'p5', name: 'Oval Crystal Drop Earrings, Gold Tone', category: 'earrings', collection: 'Gema Collection', price: 8900, oldPrice: null, badge: 'BEST SELLER', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=200&q=80', description: '' },
-    { id: 'p6', name: 'Solitaire Ring, Octagon Cut Crystal', category: 'rings', collection: 'Millenia Collection', price: 14700, oldPrice: 21000, badge: 'SALE 30%', image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=200&q=80', description: '' },
-    { id: 'p7', name: 'Crystal Tennis Bracelet, Rose Gold Plated', category: 'bracelets', collection: 'Matrix Collection', price: 18500, oldPrice: null, badge: 'BEST SELLER', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=200&q=80', description: '' },
-    { id: 'p8', name: 'Natural Amethyst Pendant, Silver Plated', category: 'gemstones', collection: 'Amethyst Collection', price: 14900, oldPrice: null, badge: 'BEST SELLER', image: 'https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=200&q=80', description: '' },
-  ];
-  saveProducts();
+function loadLocalProducts() {
+  var stored = localStorage.getItem('mjProducts');
+  if (stored) {
+    try {
+      var parsed = JSON.parse(stored);
+      if (parsed && parsed.length > 0) { products = parsed; return; }
+    } catch(e) {}
+  }
+  products = [];
 }
 
 function saveProducts() {
@@ -823,94 +786,56 @@ function switchTab(tab) {
   document.querySelector('.nav-item[data-tab="' + tab + '"]').classList.add('active');
 }
 
-var collections = [];
-var editingCollectionId = null;
+var collectionDefaults = [
+  { id: 'c1', name: 'Necklaces', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&q=80', link: 'necklaces.html' },
+  { id: 'c2', name: 'Earrings', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&q=80', link: 'earrings.html' },
+  { id: 'c3', name: 'Rings', image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&q=80', link: 'rings.html' },
+  { id: 'c4', name: 'Bracelets', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&q=80', link: 'bracelets.html' },
+  { id: 'c5', name: 'GemStones', image: 'https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=500&q=80', link: 'gemstones.html' }
+];
 
+var collections = [];
 function loadCollections() {
   var stored = localStorage.getItem('mjCollections');
   if (stored) {
-    try { collections = JSON.parse(stored); } catch(e) { collections = []; }
+    try {
+      var parsed = JSON.parse(stored);
+      if (parsed && parsed.length > 0) { collections = parsed; return; }
+    } catch(e) {}
   }
-  if (!collections || collections.length === 0) {
-    collections = [
-      { id: 'c1', name: 'Necklaces', link: 'necklaces.html', order: 1, image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&q=80' },
-      { id: 'c2', name: 'Earrings', link: 'earrings.html', order: 2, image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&q=80' },
-      { id: 'c3', name: 'Rings', link: 'rings.html', order: 3, image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&q=80' },
-      { id: 'c4', name: 'Bracelets', link: 'bracelets.html', order: 4, image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&q=80' },
-      { id: 'c5', name: 'GemStones', link: 'gemstones.html', order: 5, image: 'https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=500&q=80' },
-    ];
-    saveCollections();
-  }
+  collections = JSON.parse(JSON.stringify(collectionDefaults));
+  saveCollections();
 }
 
 function saveCollections() {
   try { localStorage.setItem('mjCollections', JSON.stringify(collections)); } catch(e) {}
 }
 
-function renderCollections() {
-  var tbody = document.getElementById('collectionsBody');
-  tbody.innerHTML = collections.sort(function(a, b) { return (a.order || 0) - (b.order || 0); }).map(function(c) {
-    return '<tr>' +
-      '<td style="width:50px"><img src="' + c.image + '" style="width:40px;height:40px;object-fit:cover;border-radius:4px" alt=""></td>' +
-      '<td><div style="font-weight:500;color:var(--black)">' + c.name + '</div></td>' +
-      '<td style="font-size:11px;color:var(--muted)">' + (c.link || '-') + '</td>' +
-      '<td><button class="action" onclick="editCollection(\'' + c.id + '\')" style="font-size:10px;letter-spacing:1px;color:var(--blue);border:none;background:none;cursor:pointer;font-family:\'Inter\',sans-serif">Edit</button> <button class="action" onclick="deleteCollection(\'' + c.id + '\')" style="font-size:10px;letter-spacing:1px;color:var(--red);border:none;background:none;cursor:pointer;font-family:\'Inter\',sans-serif">Delete</button></td>' +
-      '</tr>';
+function renderCollectionImages() {
+  var container = document.getElementById('collectionImagesBody');
+  container.innerHTML = collections.map(function(c) {
+    return '<div style="display:flex;align-items:center;gap:1rem;padding:.75rem 0;border-bottom:1px solid var(--border)">' +
+      '<img src="' + c.image + '" style="width:64px;height:64px;object-fit:cover;border-radius:6px;flex-shrink:0" alt="">' +
+      '<div style="flex:1;min-width:0">' +
+      '<div style="font-size:13px;font-weight:500;color:var(--black);margin-bottom:4px">' + c.name + '</div>' +
+      '<input id="colImg_' + c.id + '" type="text" value="' + c.image.replace(/"/g, '&quot;') + '" style="width:100%;padding:8px 10px;border:1px solid var(--border);font-family:\'Inter\',sans-serif;font-size:11px;outline:none;color:var(--mid)" placeholder="Image URL">' +
+      '</div>' +
+      '<button class="action" onclick="updateCollectionImage(\'' + c.id + '\')" style="background:var(--gold);color:var(--white);padding:8px 16px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border:none;cursor:pointer;font-family:\'Inter\',sans-serif;white-space:nowrap">Update Image</button>' +
+      '</div>';
   }).join('');
 }
 
-function showAddCollection() {
-  editingCollectionId = null;
-  document.getElementById('collectionFormTitle').textContent = 'Add Collection';
-  document.getElementById('colName').value = '';
-  document.getElementById('colLink').value = '';
-  document.getElementById('colOrder').value = '1';
-  document.getElementById('colImage').value = '';
-  document.getElementById('addCollectionCard').style.display = 'block';
-}
-
-function editCollection(id) {
+function updateCollectionImage(id) {
+  var input = document.getElementById('colImg_' + id);
+  var url = input.value.trim();
+  if (!url) { alert('Please enter an image URL.'); return; }
   var c = collections.find(function(x) { return x.id === id; });
-  if (!c) return;
-  editingCollectionId = id;
-  document.getElementById('collectionFormTitle').textContent = 'Edit Collection';
-  document.getElementById('colName').value = c.name;
-  document.getElementById('colLink').value = c.link || '';
-  document.getElementById('colOrder').value = c.order || 1;
-  document.getElementById('colImage').value = c.image || '';
-  document.getElementById('addCollectionCard').style.display = 'block';
-}
-
-function saveCollection() {
-  var name = document.getElementById('colName').value.trim();
-  var link = document.getElementById('colLink').value.trim();
-  var order = parseInt(document.getElementById('colOrder').value) || 1;
-  var image = document.getElementById('colImage').value.trim();
-
-  if (!name) { alert('Please enter collection name.'); return; }
-
-  if (editingCollectionId) {
-    var c = collections.find(function(x) { return x.id === editingCollectionId; });
-    if (c) {
-      c.name = name; c.link = link; c.order = order; c.image = image;
-      if (typeof fbSaveCollection === 'function') fbSaveCollection(c).catch(function() {});
-    }
-  } else {
-    var nc = { id: 'c' + Date.now(), name: name, link: link, order: order, image: image };
-    collections.push(nc);
-    if (typeof fbSaveCollection === 'function') fbSaveCollection(nc).catch(function() {});
+  if (c) {
+    c.image = url;
+    saveCollections();
+    renderCollectionImages();
+    if (typeof fbSaveCollection === 'function') fbSaveCollection(c).catch(function() {});
   }
-  saveCollections();
-  renderCollections();
-  document.getElementById('addCollectionCard').style.display = 'none';
-}
-
-function deleteCollection(id) {
-  if (!confirm('Delete this collection?')) return;
-  if (typeof fbDeleteCollection === 'function') fbDeleteCollection(id).catch(function() {});
-  collections = collections.filter(function(c) { return c.id !== id; });
-  saveCollections();
-  renderCollections();
 }
 </script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
