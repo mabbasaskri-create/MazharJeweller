@@ -842,7 +842,8 @@ document.getElementById('prodImageFile').addEventListener('change', function(e) 
   }
   status.textContent = 'Uploading...';
   status.style.color = 'var(--muted)';
-  var path = 'products/' + Date.now() + '-' + file.name;
+  var safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  var path = 'products/' + Date.now() + '-' + safeName;
   fbUploadImage(file, path).then(function(url) {
     document.getElementById('prodImage').value = url;
     status.textContent = 'Uploaded successfully';
