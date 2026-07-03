@@ -443,14 +443,13 @@ function showToast(msg) {
 function renderError(msg) {
   document.getElementById('pageContent').innerHTML = '<div class="error-page"><div class="icon">💎</div><h2>Product not found</h2><p>' + msg + '</p><a href="index.html" class="btn">Back to Store</a></div>';
 }
-
-init();
 </script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="store-data.js"></script>
+<script>init();</script>
 <script src="nav-auth.js"></script>
 </body>
 </html>
