@@ -112,6 +112,15 @@ function syncFromFirestore(callback) {
   }).catch(function() {
     if (callback) callback();
   });
+  if (typeof fbGetHero === 'function') {
+    fbGetHero().then(function(url) {
+      if (url) {
+        localStorage.setItem('mjHeroImage', url);
+        var img = document.getElementById('heroImg');
+        if (img) img.src = url;
+      }
+    }).catch(function() {});
+  }
 }
 
 // ===== COLLECTIONS =====

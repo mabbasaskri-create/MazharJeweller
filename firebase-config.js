@@ -122,3 +122,19 @@ function fbSaveProductPhotos(productId, urls) {
 function fbDeleteProductPhotos(productId) {
   return db.collection(FB_PRODUCT_PHOTOS_COL).doc(productId).delete().catch(function() {});
 }
+
+var FB_SETTINGS_COL = 'settings';
+
+function fbSaveHero(imageUrl) {
+  return db.collection(FB_SETTINGS_COL).doc('hero').set({
+    imageUrl: imageUrl,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+function fbGetHero() {
+  return db.collection(FB_SETTINGS_COL).doc('hero').get().then(function(doc) {
+    if (doc.exists) return doc.data().imageUrl || '';
+    return '';
+  }).catch(function() { return ''; });
+}
