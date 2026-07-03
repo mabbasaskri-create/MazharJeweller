@@ -260,6 +260,17 @@ tr:hover td{background:#faf8f4}
               </select>
             </div>
             <div>
+              <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Homepage Section</label>
+              <select id="prodSection" onchange="syncSection()" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none">
+                <option value="necklaces">Necklaces Collection</option>
+                <option value="earrings">Earrings Collection</option>
+                <option value="rings">Rings Collection</option>
+                <option value="bracelets">Bracelets Collection</option>
+                <option value="gemstones">GemStones Collection</option>
+                <option value="loved">Most Loved Jewellery</option>
+              </select>
+            </div>
+            <div>
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Price (PKR)</label>
               <input id="prodPrice" type="number" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="e.g. 12500">
             </div>
@@ -600,6 +611,7 @@ function showAddProduct() {
   populateCollectionDropdown();
   document.getElementById('prodName').value = '';
   document.getElementById('prodCategory').value = 'necklaces';
+  document.getElementById('prodSection').value = 'necklaces';
   document.getElementById('prodPrice').value = '';
   document.getElementById('prodOldPrice').value = '';
   document.getElementById('prodBadge').value = '';
@@ -616,6 +628,28 @@ function showAddProduct() {
   document.getElementById('addProductCard').style.display = 'block';
 }
 
+function syncSection() {
+  var section = document.getElementById('prodSection').value;
+  if (section === 'loved') {
+    document.getElementById('prodLoved').checked = true;
+  } else {
+    document.getElementById('prodCategory').value = section;
+    document.getElementById('prodLoved').checked = false;
+  }
+}
+
+document.addEventListener('change', function(e) {
+  if (e.target.id === 'prodCategory') {
+    var loved = document.getElementById('prodLoved');
+    if (!loved.checked) {
+      document.getElementById('prodSection').value = e.target.value;
+    }
+  }
+  if (e.target.id === 'prodLoved') {
+    document.getElementById('prodSection').value = e.target.checked ? 'loved' : document.getElementById('prodCategory').value;
+  }
+});
+
 function editProduct(id) {
   var p = products.find(function(x) { return x.id === id; });
   if (!p) return;
@@ -624,6 +658,7 @@ function editProduct(id) {
   populateCollectionDropdown();
   document.getElementById('prodName').value = p.name;
   document.getElementById('prodCategory').value = p.category;
+  document.getElementById('prodSection').value = p.loved ? 'loved' : p.category;
   document.getElementById('prodPrice').value = p.price;
   document.getElementById('prodOldPrice').value = p.oldPrice || '';
   document.getElementById('prodBadge').value = p.badge || '';
