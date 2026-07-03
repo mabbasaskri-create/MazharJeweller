@@ -69,34 +69,39 @@ function fbDeleteCollection(id) {
   return db.collection(FB_COLLECTIONS_COL).doc(id).delete();
 }
 
-function fbUploadImage(file, path) {
-  var ref = fstorage.ref(path);
-  return ref.put(file).then(function(snap) {
-    return snap.ref.getDownloadURL();
+function fbCompressImage(file, maxW, maxH, quality) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = new Image();
+      img.onload = function() {
+        var w = img.width, h = img.height;
+        if (w > maxW) { h *= maxW / w; w = maxW; }
+        if (h > maxH) { w *= maxH / h; h = maxH; }
+        var c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        var ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = function() { reject(new Error('Image load failed')); };
+      img.src = e.target.result;
+    };
+    reader.onerror = function() { reject(new Error('File read failed')); };
+    reader.readAsDataURL(file);
   });
-}
-
-function fbDeleteImage(url) {
-  if (!url || !url.includes('firebasestorage')) return Promise.resolve();
-  try {
-    var ref = fstorage.refFromURL(url);
-    return ref.delete();
-  } catch(e) {
-    return Promise.resolve();
-  }
 }
 
 function fbUploadImages(files, pathPrefix) {
   var promises = [];
-  Array.prototype.forEach.call(files, function(file, i) {
-    var safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    var path = pathPrefix + '/' + Date.now() + '-' + i + '-' + safeName;
-    var ref = fstorage.ref(path);
-    promises.push(ref.put(file).then(function(snap) {
-      return snap.ref.getDownloadURL();
-    }));
+  Array.prototype.forEach.call(files, function(file) {
+    promises.push(fbCompressImage(file, 800, 800, 0.6));
   });
   return Promise.all(promises);
+}
+
+function fbMakeThumbnail(file) {
+  return fbCompressImage(file, 200, 200, 0.4);
 }
 
 function fbGetProductPhotos(productId) {

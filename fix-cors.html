@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fix CORS - Mazhar Jewellers</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#f5f5f5;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.card{background:#fff;border-radius:12px;padding:32px;max-width:540px;width:100%;box-shadow:0 2px 20px rgba(0,0,0,.1);margin-bottom:16px}
+h1{font-size:20px;margin-bottom:6px;color:#1a1a1a}
+h2{font-size:15px;margin:16px 0 8px;color:#333}
+p{font-size:13px;color:#555;margin-bottom:10px;line-height:1.6}
+.small{font-size:12px;color:#888}
+.btn{display:block;padding:14px 24px;border:none;border-radius:8px;font-size:14px;cursor:pointer;transition:.2s;font-weight:500;width:100%;text-align:center}
+.btn-primary{background:#1a73e8;color:#fff}
+.btn-primary:hover{background:#1557b0}
+.btn-success{background:#34a853;color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+#status{margin-top:14px;padding:12px;border-radius:8px;display:none;font-size:13px;word-break:break-all}
+#status.show{display:block}
+#status.loading{background:#e8f0fe;color:#1a73e8}
+#status.success{background:#e6f4ea;color:#1e7e34}
+#status.error{background:#fce8e6;color:#c5221f}
+ol{text-align:left;font-size:13px;color:#444;margin:10px 0 12px 20px;line-height:1.8}
+.box{background:#1a1a2e;color:#00ff88;border-radius:8px;padding:14px 16px;margin:12px 0;text-align:left;font-size:12px;font-family:monospace;word-break:break-all;line-height:1.8}
+.tag{display:inline-block;background:#e8f0fe;color:#1a73e8;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<div class="card" style="text-align:center">
+  <h1>Fix CORS — Mazhar Jewellers</h1>
+  <p>Ab images upload ho jayengi admin panel se.</p>
+  
+  <div class="tag">FREE — No Payment</div>
+  
+  <button class="btn btn-primary" id="authBtn" onclick="handleAuth()" style="margin-top:12px">
+    Step 1: Sign in with Google
+  </button>
+  <div style="height:8px"></div>
+  <button class="btn btn-success" id="corsBtn" onclick="setCORS()" disabled>
+    Step 2: Set CORS
+  </button>
+  <div id="status"></div>
+</div>
+
+<div class="card" style="text-align:left">
+  <h2>Agar upar kaam na kare to Cloud Shell use karo</h2>
+  <p><b>Yeh bilkul FREE hai.</b> Koi payment nahi, koi card nahi.</p>
+  <ol>
+    <li>Kholo: <a href="https://shell.cloud.google.com" target="_blank">https://shell.cloud.google.com</a></li>
+    <li>Upar right mein <b>"Mazhar Jewellers"</b> project select karo</li>
+    <li>Neeche terminal mein yeh command do:</li>
+  </ol>
+  <div class="box">
+gcloud storage buckets describe gs://mazhar-jewellers-c502a.firebasestorage.app
+  </div>
+  <p style="font-size:12px">Pehle yeh chalao. Agar "<b>404</b>" aaye to yeh try karo:</p>
+  <div class="box">
+gcloud storage buckets describe gs://mazhar-jewellers-c502a.appspot.com
+  </div>
+  <p style="font-size:12px">Jo bucket exist kare, uske liye yeh chalao:</p>
+  <div class="box">
+gsutil cors set cors.json gs://BUCKET-NAME-HERE
+  </div>
+  <p style="font-size:12px">Ya ek hi command mein:</p>
+  <div class="box" style="font-size:11px">
+curl -X PATCH -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" -d '{"cors":[{"origin":["https://mazhar-jeweller.vercel.app"],"responseHeader":["*"],"method":["GET","POST","PUT","DELETE","HEAD"],"maxAgeSeconds":3600}]}' https://storage.googleapis.com/storage/v1/b/BUCKET-NAME-HERE
+  </div>
+</div>
+
+<script src="https://accounts.google.com/gsi/client"></script>
+<script>
+var BUCKETS = [
+  'mazhar-jewellers-c502a.firebasestorage.app',
+  'mazhar-jewellers-c502a.appspot.com'
+];
+var SCOPES = 'https://www.googleapis.com/auth/devstorage.full_control';
+var accessToken = null;
+
+function handleAuth() {
+  var btn = document.getElementById('authBtn');
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
+  setStatus('Opening sign-in...', 'loading');
+  try {
+    var client = google.accounts.oauth2.initTokenClient({
+      client_id: '516909002122-6cc9d844506486827aec73.apps.googleusercontent.com',
+      scope: SCOPES,
+      callback: function(resp) {
+        if (resp && resp.access_token) {
+          accessToken = resp.access_token;
+          document.getElementById('authBtn').textContent = 'Signed in ✓';
+          document.getElementById('corsBtn').disabled = false;
+          setStatus('Signed in! Click "Set CORS"', 'success');
+        } else {
+          document.getElementById('authBtn').disabled = false;
+          document.getElementById('authBtn').textContent = 'Step 1: Sign in with Google';
+          setStatus('Sign-in failed. Use Cloud Shell method below.', 'error');
+        }
+      },
+      error_callback: function() {
+        document.getElementById('authBtn').disabled = false;
+        document.getElementById('authBtn').textContent = 'Step 1: Sign in with Google';
+        setStatus('Sign-in failed. Use Cloud Shell method below.', 'error');
+      }
+    });
+    client.requestAccessToken();
+  } catch(e) {
+    document.getElementById('authBtn').disabled = false;
+    document.getElementById('authBtn').textContent = 'Step 1: Sign in with Google';
+    setStatus('Use Cloud Shell method below.', 'error');
+  }
+}
+
+function setCORS() {
+  if (!accessToken) { setStatus('Sign in first', 'error'); return; }
+  var btn = document.getElementById('corsBtn');
+  btn.disabled = true;
+  btn.textContent = 'Checking buckets...';
+  setStatus('Trying to find your storage bucket...', 'loading');
+  
+  tryBucket(0);
+}
+
+function tryBucket(idx) {
+  if (idx >= BUCKETS.length) {
+    setStatus('Could not find your bucket. Use Cloud Shell method below.<br><br>Run: <b>gcloud storage buckets list</b> in Cloud Shell to find your bucket name.', 'error');
+    document.getElementById('corsBtn').disabled = false;
+    document.getElementById('corsBtn').textContent = 'Set CORS';
+    return;
+  }
+  
+  var bucket = BUCKETS[idx];
+  setStatus('Trying bucket: ' + bucket + '...', 'loading');
+  
+  fetch('https://storage.googleapis.com/storage/v1/b/' + bucket, {
+    method: 'GET',
+    headers: { 'Authorization': 'Bearer ' + accessToken }
+  }).then(function(res) {
+    if (res.ok) {
+      applyCORS(bucket);
+    } else if (res.status === 404) {
+      tryBucket(idx + 1);
+    } else {
+      return res.json().then(function(d) {
+        throw new Error((d.error && d.error.message) || 'Status ' + res.status);
+      });
+    }
+  }).catch(function(err) {
+    setStatus('Error: ' + err.message + '<br><br>Use Cloud Shell method below.', 'error');
+    document.getElementById('corsBtn').disabled = false;
+    document.getElementById('corsBtn').textContent = 'Set CORS';
+  });
+}
+
+function applyCORS(bucket) {
+  var btn = document.getElementById('corsBtn');
+  btn.textContent = 'Setting CORS on ' + bucket + '...';
+  setStatus('Found bucket! Applying CORS...', 'loading');
+
+  fetch('https://storage.googleapis.com/storage/v1/b/' + bucket, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': 'Bearer ' + accessToken,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      cors: [{
+        origin: ['https://mazhar-jeweller.vercel.app'],
+        method: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD'],
+        responseHeader: ['*'],
+        maxAgeSeconds: 3600
+      }]
+    })
+  }).then(function(res) {
+    if (res.ok) {
+      setStatus('CORS set successfully on: <b>' + bucket + '</b> ✅<br><br>Ab admin panel mein jaao aur images upload karo!', 'success');
+      btn.textContent = 'Done ✓';
+      btn.className = 'btn btn-success';
+      return res;
+    }
+    return res.json().then(function(d) { throw new Error((d.error && d.error.message) || 'Failed'); });
+  }).catch(function(err) {
+    setStatus('Error: ' + err.message + '<br><br>Try Cloud Shell method below.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Set CORS';
+  });
+}
+
+function setStatus(msg, type) {
+  var el = document.getElementById('status');
+  el.innerHTML = msg;
+  el.className = 'show ' + type;
+}
+</script>
+</body>
+</html>
