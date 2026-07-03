@@ -43,7 +43,7 @@ function productCardHTML(p) {
   return '<a href="' + link + '" class="prod-card h-scroll-item">' +
     '<div class="prod-img">' +
     badgeHtml +
-    '<button class="prod-wish">♡</button>' +
+    '<button type="button" class="prod-wish" data-product-id="' + p.id + '" aria-label="Add to wishlist">♡</button>' +
     '<img src="' + p.image + '" alt="' + p.name.replace(/"/g, '&quot;') + '" loading="lazy">' +
     '<button class="prod-add">ADD TO CART</button>' +
     '</div>' +
@@ -82,7 +82,7 @@ function renderProductGrid(containerId, products) {
     return '<a href="' + link + '" class="prod-card">' +
       '<div class="prod-img">' +
       badgeHtml +
-      '<button class="prod-wish">♡</button>' +
+      '<button type="button" class="prod-wish" data-product-id="' + p.id + '" aria-label="Add to wishlist">♡</button>' +
       '<img src="' + p.image + '" alt="' + p.name.replace(/"/g, '&quot;') + '" loading="lazy">' +
       '<button class="prod-add">ADD TO CART</button>' +
       '</div>' +
@@ -239,4 +239,7 @@ function reRenderAll() {
   }
   renderCollections();
   if (typeof initHorizontalScroll === 'function') initHorizontalScroll();
+  if (window.MJStoreUI && typeof window.MJStoreUI.refreshWishlistUI === 'function') {
+    window.MJStoreUI.refreshWishlistUI();
+  }
 }

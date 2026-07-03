@@ -338,7 +338,7 @@ function renderProduct() {
           '<button class="qty-btn" onclick="changeQty(1)">+</button>' +
         '</div>' +
         '<button class="add-cart-btn" onclick="addToCart()">Add to Cart</button>' +
-        '<button class="wish-btn" onclick="toggleWish()">♡</button>' +
+        '<button type="button" class="wish-btn" id="detailWishBtn" data-product-id="' + p.id + '" onclick="toggleWish()">♡</button>' +
       '</div>' +
       '<div class="prod-features">' +
         '<div class="prod-feat"><strong>🚚 Free Delivery</strong>PKR 5,000+ par free delivery</div>' +
@@ -350,6 +350,7 @@ function renderProduct() {
   '</div>';
 
   document.getElementById('pageContent').innerHTML = html;
+  if (window.MJStoreUI) window.MJStoreUI.refreshWishlistUI();
 }
 
 function switchImage(index) {
@@ -422,6 +423,12 @@ function addToCart() {
 function toggleWish() {
   var p = product;
   if (!p) return;
+  if (window.MJStoreUI) {
+    var added = window.MJStoreUI.toggleWishlist(p.id);
+    showToast(added ? 'Added to wishlist ♡' : 'Removed from wishlist');
+    window.MJStoreUI.refreshWishlistUI();
+    return;
+  }
   var wish = [];
   try {
     var stored = localStorage.getItem('mjWish');
@@ -449,6 +456,7 @@ function renderError(msg) {
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="store-data.js"></script>
+<script src="store-ui.js"></script>
 <script>init();</script>
 <script src="nav-auth.js"></script>
 <script src="whatsapp-float.js"></script>
