@@ -102,6 +102,9 @@ tr:hover td{background:#faf8f4}
   .admin-main h1{font-size:24px}
   .section-card .card-hd{flex-direction:column;align-items:flex-start;gap:6px}
 }
+.btn-mobile-preview{background:var(--black);color:var(--white);border:none;padding:7px 14px;font-size:10px;letter-spacing:1.5px;cursor:pointer;font-family:'Inter',sans-serif;border-radius:4px;transition:background .2s;white-space:nowrap}
+.btn-mobile-preview:hover{background:var(--gold)}
+
 </style>
 </head>
 <body>
@@ -113,7 +116,19 @@ tr:hover td{background:#faf8f4}
 <div class="admin-header">
   <div class="admin-header-inner">
     <a href="index.html" class="logo">MAZHAR <em>JEWELLERS</em> <span class="badge">Admin</span></a>
-    <a href="index.html" class="back-link">&larr; Back to Store</a>
+    <div style="display:flex;align-items:center;gap:12px">
+      <select id="previewPageSelect" style="background:var(--gold-pale);border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;outline:none;color:var(--black)">
+        <option value="index.html">Home</option>
+        <option value="necklaces.html">Necklaces</option>
+        <option value="earrings.html">Earrings</option>
+        <option value="rings.html">Rings</option>
+        <option value="bracelets.html">Bracelets</option>
+        <option value="gemstones.html">Gemstones</option>
+        <option value="product-detail.html">Product Detail</option>
+      </select>
+      <button class="btn-mobile-preview" onclick="openMobilePreview()">📱 Mobile View</button>
+      <a href="index.html" class="back-link">&larr; Back to Store</a>
+    </div>
   </div>
 </div>
 
@@ -742,7 +757,7 @@ function saveProduct() {
 
   var urls = window._uploadedImages || [];
   if (image && urls.indexOf(image) === -1) urls.unshift(image);
-  if (urls.length > 0) image = urls[0];
+  image = urls.length > 0 ? urls[0] : image;
 
   if (editingProductId) {
     var p = products.find(function(x) { return x.id === editingProductId; });
@@ -752,7 +767,7 @@ function saveProduct() {
       p.price = price;
       p.oldPrice = oldPrice;
       p.badge = badge;
-      p.image = image || p.image;
+      p.image = image;
       p.collection = collection;
       p.sizes = sizes;
       p.colors = colors;
@@ -807,8 +822,11 @@ function renderImagePreview() {
 
 function removeUploadedImage(index) {
   var urls = window._uploadedImages || [];
+  var removed = urls[index];
   urls.splice(index, 1);
   window._uploadedImages = urls;
+  var input = document.getElementById('prodImage');
+  if (input && input.value === removed) input.value = '';
   renderImagePreview();
 }
 
@@ -1052,6 +1070,14 @@ document.getElementById('prodImageFile').addEventListener('change', function(e) 
     status.style.color = 'var(--red)';
   });
 });
+</script>
+
+<script>
+function openMobilePreview(){
+  var page=document.getElementById('previewPageSelect').value;
+  var w=window.open(page,'mjMobilePreview','width=375,height=780,scrollbars=yes,resizable=yes');
+  if(!w||w.closed||typeof w.closed=='undefined')alert('Please allow popups for this site to use Mobile Preview.');
+}
 </script>
 </body>
 </html>
