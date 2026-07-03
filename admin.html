@@ -310,7 +310,15 @@ tr:hover td{background:#faf8f4}
               <input id="prodImageFile" type="file" accept="image/*" multiple style="width:100%;font-size:11px;color:var(--mid);font-family:'Inter',sans-serif;padding:6px 0">
               <div id="prodImageStatus" style="font-size:10px;color:var(--muted);margin-top:2px"></div>
               <div id="prodImagePreview" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;min-height:0"></div>
-              <input id="prodImage" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none;margin-top:6px" placeholder="Or paste image URL...">
+              <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
+                <input id="prodImage" style="flex:1;min-width:150px;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="Or paste image URL...">
+                <label style="font-size:10px;color:var(--muted);display:flex;align-items:center;gap:4px;white-space:nowrap">
+                  BG Threshold:
+                  <input id="bgThreshold" type="range" min="0" max="255" value="200" style="width:60px">
+                  <span id="bgThresholdVal">200</span>
+                </label>
+                <button type="button" onclick="removeBgFromImages()" style="background:var(--gold);color:var(--white);border:none;padding:8px 14px;font-size:10px;letter-spacing:1.5px;cursor:pointer;font-family:'Inter',sans-serif;border-radius:4px;white-space:nowrap">Remove BG</button>
+              </div>
             </div>
             <div style="grid-column:span 2">
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Collection</label>
@@ -814,10 +822,73 @@ function renderImagePreview() {
   var urls = window._uploadedImages || [];
   if (urls.length === 0) { container.innerHTML = ''; return; }
   container.innerHTML = urls.map(function(url, i) {
-    return '<div style="position:relative;width:70px;height:70px;border:1px solid var(--border);border-radius:4px;overflow:hidden;flex-shrink:0">' +
-      '<img src="' + url + '" style="width:100%;height:100%;object-fit:cover">' +
+    return '<div style="position:relative;width:70px;height:70px;border:1px solid var(--border);border-radius:4px;overflow:hidden;flex-shrink:0;background:repeating-conic-gradient(#e0d8cc 0% 25%,#f5ede0 0% 50%) 0 0/12px 12px">' +
+      '<img src="' + url + '" style="width:100%;height:100%;object-fit:contain;display:block">' +
       '<button type="button" onclick="removeUploadedImage(' + i + ')" style="position:absolute;top:1px;right:1px;width:16px;height:16px;border:none;background:rgba(0,0,0,0.6);color:#fff;font-size:8px;border-radius:50%;cursor:pointer;line-height:16px;text-align:center;padding:0">&times;</button></div>';
   }).join('');
+}
+
+document.getElementById('bgThreshold').addEventListener('input',function(){
+  document.getElementById('bgThresholdVal').textContent=this.value;
+});
+
+function removeBgFromImageDataUrl(src,threshold,callback){
+  var img=new Image();
+  img.crossOrigin='Anonymous';
+  img.onload=function(){
+    try{
+      var c=document.createElement('canvas');
+      c.width=img.width;c.height=img.height;
+      var ctx=c.getContext('2d');
+      ctx.drawImage(img,0,0);
+      var d=ctx.getImageData(0,0,c.width,c.height);
+      var px=d.data;
+      for(var i=0;i<px.length;i+=4){
+        var r=px[i],g=px[i+1],b=px[i+2];
+        if(r>=threshold&&g>=threshold&&b>=threshold){
+          px[i+3]=0;
+        }
+      }
+      ctx.putImageData(d,0,0);
+      callback(c.toDataURL('image/png'));
+    }catch(e){
+      callback(src);
+    }
+  };
+  img.onerror=function(){callback(src);};
+  img.src=src;
+}
+
+function removeBgFromImages(){
+  var urls=window._uploadedImages||[];
+  var input=document.getElementById('prodImage');
+  if(urls.length===0){
+    if(input && input.value.trim()){
+      urls=[input.value.trim()];
+    }else{
+      alert('No images to process. Upload or paste an image URL first.');
+      return;
+    }
+  }
+  var threshold=parseInt(document.getElementById('bgThreshold').value,10);
+  var done=0;
+  document.getElementById('prodImageStatus').textContent='Removing background...';
+  document.getElementById('prodImageStatus').style.color='var(--muted)';
+  urls.forEach(function(url,i){
+    removeBgFromImageDataUrl(url,threshold,function(result){
+      urls[i]=result;
+      done++;
+      if(done===urls.length){
+        window._uploadedImages=urls;
+        if(input && input.value.trim() && urls.indexOf(input.value.trim())===-1){
+          input.value='';
+        }
+        renderImagePreview();
+        document.getElementById('prodImageStatus').textContent='Background removed from '+done+' image(s)';
+        document.getElementById('prodImageStatus').style.color='var(--green)';
+      }
+    });
+  });
 }
 
 function removeUploadedImage(index) {
@@ -1059,12 +1130,22 @@ document.getElementById('prodImageFile').addEventListener('change', function(e) 
   }
   status.textContent = 'Uploading ' + files.length + ' image(s)...';
   status.style.color = 'var(--muted)';
+  var threshold = parseInt(document.getElementById('bgThreshold').value, 10);
   var pathPrefix = 'products/' + Date.now();
   fbUploadImages(files, pathPrefix).then(function(urls) {
-    window._uploadedImages = (window._uploadedImages || []).concat(urls);
-    renderImagePreview();
-    status.textContent = urls.length + ' image(s) uploaded';
-    status.style.color = 'var(--green)';
+    var done = 0;
+    urls.forEach(function(url, i) {
+      removeBgFromImageDataUrl(url, threshold, function(result) {
+        urls[i] = result;
+        done++;
+        if (done === urls.length) {
+          window._uploadedImages = (window._uploadedImages || []).concat(urls);
+          renderImagePreview();
+          status.textContent = urls.length + ' image(s) uploaded with transparent BG';
+          status.style.color = 'var(--green)';
+        }
+      });
+    });
   }).catch(function(err) {
     status.textContent = 'Upload failed: ' + err.message;
     status.style.color = 'var(--red)';
