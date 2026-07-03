@@ -14,6 +14,7 @@ var fstorage = firebase.storage();
 
 var FB_PRODUCTS_COL = 'products';
 var FB_COLLECTIONS_COL = 'collections';
+var FB_PRODUCT_PHOTOS_COL = 'product_photos';
 
 function fbGetProducts() {
   return db.collection(FB_PRODUCTS_COL).orderBy('createdAt', 'desc').get().then(function(snap) {
@@ -83,4 +84,36 @@ function fbDeleteImage(url) {
   } catch(e) {
     return Promise.resolve();
   }
+}
+
+function fbUploadImages(files, pathPrefix) {
+  var promises = [];
+  Array.prototype.forEach.call(files, function(file, i) {
+    var safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    var path = pathPrefix + '/' + Date.now() + '-' + i + '-' + safeName;
+    var ref = fstorage.ref(path);
+    promises.push(ref.put(file).then(function(snap) {
+      return snap.ref.getDownloadURL();
+    }));
+  });
+  return Promise.all(promises);
+}
+
+function fbGetProductPhotos(productId) {
+  return db.collection(FB_PRODUCT_PHOTOS_COL).doc(productId).get().then(function(doc) {
+    if (doc.exists) return doc.data().images || [];
+    return [];
+  });
+}
+
+function fbSaveProductPhotos(productId, urls) {
+  return db.collection(FB_PRODUCT_PHOTOS_COL).doc(productId).set({
+    productId: productId,
+    images: urls,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+function fbDeleteProductPhotos(productId) {
+  return db.collection(FB_PRODUCT_PHOTOS_COL).doc(productId).delete().catch(function() {});
 }
