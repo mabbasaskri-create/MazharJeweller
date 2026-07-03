@@ -356,6 +356,9 @@ tr:hover td{background:#faf8f4}
         </div>
         <div class="card-body" id="collectionImagesBody" style="padding:1.25rem">
         </div>
+        <div style="padding:0 1.25rem 1.25rem">
+          <button class="btn" onclick="resetCollectionImages()" style="background:var(--red);color:#fff">Reset to Default</button>
+        </div>
       </div>
     </div>
 
@@ -370,7 +373,7 @@ tr:hover td{background:#faf8f4}
         <div class="card-body" style="padding:1.25rem">
           <div style="max-width:800px">
             <div style="margin-bottom:1rem">
-              <img id="heroPreview" src="" alt="Hero preview" style="width:100%;max-height:400px;object-fit:cover;border-radius:8px;background:#eee;display:none">
+              <img id="heroPreview" src="" alt="Hero preview" onerror="this.style.display='none'" style="width:100%;max-height:400px;object-fit:cover;border-radius:8px;background:#eee;display:none">
             </div>
             <div class="form-group">
               <label>Upload Image</label>
@@ -851,6 +854,7 @@ function switchTab(tab) {
   document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('active'); });
   document.querySelector('.nav-item[data-tab="' + tab + '"]').classList.add('active');
   if (tab === 'hero') loadHeroPreview();
+  if (tab === 'collections') { loadCollections(); renderCollectionImages(); }
 }
 
 var collectionDefaults = [
@@ -905,6 +909,22 @@ function updateCollectionImage(id) {
   }
 }
 
+function resetCollectionImages() {
+  if (!confirm('Reset all collection images to defaults?')) return;
+  collections = JSON.parse(JSON.stringify(collectionDefaults));
+  saveCollections();
+  renderCollectionImages();
+  if (typeof fbGetCollections === 'function') {
+    fbGetCollections().then(function(list) {
+      list.forEach(function(c) {
+        var def = collectionDefaults.find(function(d) { return d.id === c.id; });
+        if (def) fbSaveCollection({ id: c.id, image: def.image }).catch(function() {});
+      });
+    }).catch(function() {});
+  }
+  alert('Collection images reset to default.');
+}
+
 function loadHeroPreview() {
   var preview = document.getElementById('heroPreview');
   var url = localStorage.getItem('mjHeroImage');
@@ -937,7 +957,7 @@ function saveHeroImage() {
   if (fileInput.files && fileInput.files[0]) {
     var file = fileInput.files[0];
     if (typeof fbCompressImage === 'function') {
-      fbCompressImage(file, 1200, 0.7).then(function(dataUrl) {
+      fbCompressImage(file, 1200, 1200, 0.7).then(function(dataUrl) {
         saveUrl(dataUrl);
       }).catch(function() {
         var reader = new FileReader();
