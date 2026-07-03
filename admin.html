@@ -1130,22 +1130,12 @@ document.getElementById('prodImageFile').addEventListener('change', function(e) 
   }
   status.textContent = 'Uploading ' + files.length + ' image(s)...';
   status.style.color = 'var(--muted)';
-  var threshold = parseInt(document.getElementById('bgThreshold').value, 10);
   var pathPrefix = 'products/' + Date.now();
   fbUploadImages(files, pathPrefix).then(function(urls) {
-    var done = 0;
-    urls.forEach(function(url, i) {
-      removeBgFromImageDataUrl(url, threshold, function(result) {
-        urls[i] = result;
-        done++;
-        if (done === urls.length) {
-          window._uploadedImages = (window._uploadedImages || []).concat(urls);
-          renderImagePreview();
-          status.textContent = urls.length + ' image(s) uploaded with transparent BG';
-          status.style.color = 'var(--green)';
-        }
-      });
-    });
+    window._uploadedImages = (window._uploadedImages || []).concat(urls);
+    renderImagePreview();
+    status.textContent = urls.length + ' image(s) uploaded';
+    status.style.color = 'var(--green)';
   }).catch(function(err) {
     status.textContent = 'Upload failed: ' + err.message;
     status.style.color = 'var(--red)';
