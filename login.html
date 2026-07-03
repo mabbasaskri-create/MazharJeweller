@@ -118,13 +118,19 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:2rem 1.5rem;text-a
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics-compat.js"></script>
 <script>
 firebase.initializeApp({
-  apiKey: "AIzaSyAyOZ7_Dc1E_sXDAE8_e6KssMOLB75y0XQ",
-  authDomain: "gentify-bbd67.firebaseapp.com",
-  projectId: "gentify-bbd67"
+  apiKey: "AIzaSyA06PL7Yi4KB_OEeyf-bjXaRgE0DH8ImFg",
+  authDomain: "mazhar-jewellers-c502a.firebaseapp.com",
+  projectId: "mazhar-jewellers-c502a",
+  storageBucket: "mazhar-jewellers-c502a.firebasestorage.app",
+  messagingSenderId: "516909002122",
+  appId: "1:516909002122:web:6cc9d844506486827aec73",
+  measurementId: "G-L6JZR5G04M"
 });
 
+firebase.analytics();
 var auth = firebase.auth();
 var googleProvider = new firebase.auth.GoogleAuthProvider();
 
