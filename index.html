@@ -395,42 +395,7 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem}
     <h2 class="sec-title">Our Collections</h2>
     <p class="sec-sub">For every occasion, for every style</p>
   </div>
-  <div class="h-scroll-wrap">
-    <div class="h-scroll">
-      <a href="necklaces.html" class="cat-card2 h-scroll-item">
-        <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&q=80" alt="Necklaces">
-        <div class="cat-grad"></div>
-        <span class="cat-label">Necklaces</span>
-        <span class="cat-count">142+</span>
-      </a>
-      <a href="earrings.html" class="cat-card2 h-scroll-item">
-        <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&q=80" alt="Earrings">
-        <div class="cat-grad"></div>
-        <span class="cat-label">Earrings</span>
-        <span class="cat-count">98+</span>
-      </a>
-      <a href="rings.html" class="cat-card2 h-scroll-item">
-        <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&q=80" alt="Rings">
-        <div class="cat-grad"></div>
-        <span class="cat-label">Rings</span>
-        <span class="cat-count">76+</span>
-      </a>
-      <a href="bracelets.html" class="cat-card2 h-scroll-item">
-        <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&q=80" alt="Bracelets">
-        <div class="cat-grad"></div>
-        <span class="cat-label">Bracelets</span>
-        <span class="cat-count">65+</span>
-      </a>
-      <a href="gemstones.html" class="cat-card2 h-scroll-item">
-        <img src="https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=500&q=80" alt="GemStones">
-        <div class="cat-grad"></div>
-        <span class="cat-label">GemStones</span>
-        <span class="cat-count">50+</span>
-      </a>
-    </div>
-    <button class="h-scroll-btn prev" aria-label="Previous">‹</button>
-    <button class="h-scroll-btn next" aria-label="Next">›</button>
-  </div>
+  <div class="h-scroll-wrap" id="collectionsWrap"></div>
 </div>
 
 <div style="background:var(--white)">
@@ -739,6 +704,11 @@ document.addEventListener('DOMContentLoaded',function(){
   });
 });
 </script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script src="store-data.js"></script>
 <script>
 renderProductScroll('scroll-necklaces', getProductsByCategory('necklaces'));
@@ -747,6 +717,7 @@ renderProductScroll('scroll-rings', getProductsByCategory('rings'));
 renderProductScroll('scroll-bracelets', getProductsByCategory('bracelets'));
 renderProductScroll('scroll-gemstones', getProductsByCategory('gemstones'));
 renderProductScroll('scroll-best', getStoreProducts());
+renderCollections('collectionsWrap');
 </script>
 <script src="nav-auth.js"></script>
 </body>

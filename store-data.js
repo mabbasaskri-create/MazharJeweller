@@ -117,6 +117,111 @@ function renderProductGrid(containerId, products) {
   }).join('');
 }
 
+function saveProductsToStorage(prods) {
+  try { localStorage.setItem(STORE_PRODUCTS_KEY, JSON.stringify(prods)); } catch(e) {}
+}
+
+function syncFromFirestore(callback) {
+  if (typeof fbGetProducts !== 'function') {
+    if (callback) callback();
+    return;
+  }
+  fbGetProducts().then(function(list) {
+    if (list && list.length > 0) {
+      saveProductsToStorage(list);
+    } else {
+      var defaults = getStoreProducts();
+      defaults.forEach(function(p) {
+        var cp = JSON.parse(JSON.stringify(p));
+        fbSaveProduct(cp).catch(function() {});
+      });
+    }
+    if (callback) callback();
+  }).catch(function() {
+    if (callback) callback();
+  });
+}
+
+function seedDefaultsToFirestore() {
+  if (typeof fbGetProducts !== 'function') return;
+  fbGetProducts().then(function(list) {
+    if (!list || list.length === 0) {
+      var defaults = getStoreProducts();
+      defaults.forEach(function(p) {
+        var cp = JSON.parse(JSON.stringify(p));
+        fbSaveProduct(cp).catch(function() {});
+      });
+    }
+  }).catch(function() {});
+}
+
+// ===== COLLECTIONS =====
+function getCollections() {
+  var stored = localStorage.getItem('mjCollections');
+  if (stored) {
+    try {
+      var parsed = JSON.parse(stored);
+      if (parsed && parsed.length > 0) return parsed;
+    } catch(e) {}
+  }
+  return [
+    { name: 'Necklaces', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&q=80', link: 'necklaces.html' },
+    { name: 'Earrings', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&q=80', link: 'earrings.html' },
+    { name: 'Rings', image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&q=80', link: 'rings.html' },
+    { name: 'Bracelets', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&q=80', link: 'bracelets.html' },
+    { name: 'GemStones', image: 'https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=500&q=80', link: 'gemstones.html' }
+  ];
+}
+
+function renderCollections(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var cols = getCollections();
+  container.innerHTML = '<div class="h-scroll">' + cols.map(function(c) {
+    return '<a href="' + c.link + '" class="cat-card2 h-scroll-item">' +
+      '<img src="' + c.image + '" alt="' + c.name + '" loading="lazy">' +
+      '<div class="cat-grad"></div>' +
+      '<span class="cat-label">' + c.name + '</span>' +
+      '<span class="cat-count"></span>' +
+      '</a>';
+  }).join('') + '</div>' +
+    '<button class="h-scroll-btn prev" aria-label="Previous">‹</button>' +
+    '<button class="h-scroll-btn next" aria-label="Next">›</button>';
+}
+
 (function initStore() {
   getStoreProducts();
+  if (typeof fbGetProducts === 'function') {
+    syncFromFirestore(function() {
+      reRenderAll();
+    });
+  }
 })();
+
+function reRenderAll() {
+  var scrollIds = ['scroll-necklaces', 'scroll-earrings', 'scroll-rings', 'scroll-bracelets', 'scroll-gemstones', 'scroll-best'];
+  scrollIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) {
+      var cat = id.replace('scroll-', '');
+      var prods = cat === 'best' ? getStoreProducts() : getProductsByCategory(cat);
+      renderProductScroll(id, prods);
+    }
+  });
+  var gridId = 'productGrid';
+  var gridEl = document.getElementById(gridId);
+  if (gridEl) {
+    var cats = ['necklaces', 'earrings', 'rings', 'bracelets', 'gemstones'];
+    var found = null;
+    var page = window.location.pathname.split('/').pop().replace('.html', '');
+    if (page === 'sparkle-pk-updated') page = 'necklaces';
+    cats.forEach(function(c) {
+      if (page === c) found = c;
+    });
+    if (found) renderProductGrid(gridId, getProductsByCategory(found));
+  }
+  var collectionsWrap = document.getElementById('collectionsWrap');
+  if (collectionsWrap) {
+    renderCollections('collectionsWrap');
+  }
+}
