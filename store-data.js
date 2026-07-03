@@ -60,9 +60,7 @@ function renderProductScroll(containerId, products) {
     container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px">No products yet. Add some from the admin panel.</div>';
     return;
   }
-  container.innerHTML = '<div class="h-scroll">' + products.map(productCardHTML).join('') + '</div>' +
-    '<button class="h-scroll-btn prev" aria-label="Previous">‹</button>' +
-    '<button class="h-scroll-btn next" aria-label="Next">›</button>';
+  container.innerHTML = products.map(productCardHTML).join('');
 }
 
 function renderProductGrid(containerId, products) {
