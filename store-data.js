@@ -139,20 +139,18 @@ function getCollections() {
   ];
 }
 
-function renderCollections(containerId) {
-  var container = document.getElementById(containerId);
+function renderCollections() {
+  var container = document.getElementById('scroll-collections');
   if (!container) return;
   var cols = getCollections();
-  container.innerHTML = '<div class="h-scroll">' + cols.map(function(c) {
+  container.innerHTML = cols.map(function(c) {
     return '<a href="' + c.link + '" class="cat-card2 h-scroll-item">' +
       '<img src="' + c.image + '" alt="' + c.name + '" loading="lazy">' +
       '<div class="cat-grad"></div>' +
       '<span class="cat-label">' + c.name + '</span>' +
       '<span class="cat-count"></span>' +
       '</a>';
-  }).join('') + '</div>' +
-    '<button class="h-scroll-btn prev" aria-label="Previous">‹</button>' +
-    '<button class="h-scroll-btn next" aria-label="Next">›</button>';
+  }).join('');
 }
 
 (function initStore() {
@@ -186,8 +184,6 @@ function reRenderAll() {
     });
     if (found) renderProductGrid(gridId, getProductsByCategory(found));
   }
-  var collectionsWrap = document.getElementById('collectionsWrap');
-  if (collectionsWrap) {
-    renderCollections('collectionsWrap');
-  }
+  renderCollections();
+  if (typeof initHorizontalScroll === 'function') initHorizontalScroll();
 }
