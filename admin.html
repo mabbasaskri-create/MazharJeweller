@@ -1004,9 +1004,10 @@ function updateCollectionImage(id) {
 
   if (fileInput.files && fileInput.files[0]) {
     var file = fileInput.files[0];
-    if (typeof fbCompressImage === 'function') {
-      fbCompressImage(file, 800, 800, 0.6).then(function(dataUrl) {
-        saveUrl(dataUrl);
+    if (typeof fbUploadFileToStorage === 'function') {
+      document.getElementById('colImg_' + id).placeholder = 'Uploading...';
+      fbUploadFileToStorage(file, 'collections').then(function(downloadUrl) {
+        saveUrl(downloadUrl);
       }).catch(function() {
         var reader = new FileReader();
         reader.onload = function(e) { saveUrl(e.target.result); };
@@ -1071,7 +1072,15 @@ function saveHeroImage() {
 
   if (fileInput.files && fileInput.files[0]) {
     var file = fileInput.files[0];
-    if (typeof fbCompressImage === 'function') {
+    if (typeof fbUploadFileToStorage === 'function') {
+      fbUploadFileToStorage(file, 'hero').then(function(downloadUrl) {
+        saveUrl(downloadUrl);
+      }).catch(function() {
+        var reader = new FileReader();
+        reader.onload = function(e) { saveUrl(e.target.result); };
+        reader.readAsDataURL(file);
+      });
+    } else if (typeof fbCompressImage === 'function') {
       fbCompressImage(file, 1200, 1200, 0.7).then(function(dataUrl) {
         saveUrl(dataUrl);
       }).catch(function() {
@@ -1123,23 +1132,34 @@ document.getElementById('prodImageFile').addEventListener('change', function(e) 
     return;
   }
   var status = document.getElementById('prodImageStatus');
-  if (typeof fbUploadImages !== 'function') {
+  if (typeof fbUploadFileToStorage !== 'function') {
     status.textContent = 'Upload not available';
     status.style.color = 'var(--red)';
     return;
   }
   status.textContent = 'Uploading ' + files.length + ' image(s)...';
   status.style.color = 'var(--muted)';
-  var pathPrefix = 'products/' + Date.now();
-  fbUploadImages(files, pathPrefix).then(function(urls) {
-    window._uploadedImages = (window._uploadedImages || []).concat(urls);
-    renderImagePreview();
-    status.textContent = urls.length + ' image(s) uploaded';
-    status.style.color = 'var(--green)';
-  }).catch(function(err) {
-    status.textContent = 'Upload failed: ' + err.message;
-    status.style.color = 'var(--red)';
-  });
+  var uploaded = [];
+  var total = files.length;
+  var done = 0;
+  for (var fi = 0; fi < files.length; fi++) {
+    (function(file) {
+      fbUploadFileToStorage(file, 'products').then(function(url) {
+        uploaded.push(url);
+        done++;
+        if (done === total) {
+          window._uploadedImages = (window._uploadedImages || []).concat(uploaded);
+          renderImagePreview();
+          status.textContent = uploaded.length + ' image(s) uploaded to Storage';
+          status.style.color = 'var(--green)';
+        }
+      }).catch(function(err) {
+        done++;
+        status.textContent = 'Upload failed: ' + err.message;
+        status.style.color = 'var(--red)';
+      });
+    })(files[fi]);
+  }
 });
 </script>
 

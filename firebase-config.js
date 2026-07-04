@@ -123,6 +123,29 @@ function fbDeleteProductPhotos(productId) {
   return db.collection(FB_PRODUCT_PHOTOS_COL).doc(productId).delete().catch(function() {});
 }
 
+function fbUploadToStorage(dataUrl, folder) {
+  var byteString = atob(dataUrl.split(',')[1]);
+  var mimeType = dataUrl.split(',')[0].split(':')[1].split(';')[0];
+  var ab = new ArrayBuffer(byteString.length);
+  var ia = new Uint8Array(ab);
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  var ext = mimeType === 'image/png' ? '.png' : '.jpg';
+  var blob = new Blob([ab], { type: mimeType });
+  var fileName = folder + '/' + Date.now() + ext;
+  var ref = fstorage.ref().child(fileName);
+  return ref.put(blob, { contentType: mimeType }).then(function(snapshot) {
+    return snapshot.ref.getDownloadURL();
+  });
+}
+
+function fbUploadFileToStorage(file, folder) {
+  return fbCompressImage(file, 800, 800, 0.6).then(function(dataUrl) {
+    return fbUploadToStorage(dataUrl, folder);
+  });
+}
+
 var FB_SETTINGS_COL = 'settings';
 
 function fbSaveHero(imageUrl) {
