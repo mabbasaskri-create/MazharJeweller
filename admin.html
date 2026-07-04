@@ -1005,19 +1005,23 @@ function updateCollectionImage(id) {
   if (fileInput.files && fileInput.files[0]) {
     var file = fileInput.files[0];
     document.getElementById('colImg_' + id).placeholder = 'Uploading...';
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var dataUrl = e.target.result;
-      saveUrl(dataUrl);
-      if (typeof fbUploadFileToStorage === 'function') {
-        fbUploadFileToStorage(file, 'collections').then(function(downloadUrl) {
-          c.image = downloadUrl;
-          saveCollections();
-          renderCollectionImages();
-        }).catch(function() {});
-      }
-    };
-    reader.readAsDataURL(file);
+    if (typeof fbCompressImage === 'function') {
+      fbCompressImage(file, 800, 800, 0.6).then(function(dataUrl) {
+        saveUrl(dataUrl);
+      });
+    } else {
+      var reader = new FileReader();
+      reader.onload = function(e) { saveUrl(e.target.result); };
+      reader.readAsDataURL(file);
+    }
+    if (typeof fbUploadFileToStorage === 'function') {
+      fbUploadFileToStorage(file, 'collections').then(function(downloadUrl) {
+        c.image = downloadUrl;
+        saveCollections();
+        renderCollectionImages();
+        if (typeof fbSaveCollection === 'function') fbSaveCollection(c).catch(function() {});
+      }).catch(function() {});
+    }
     return;
   }
 
@@ -1072,18 +1076,22 @@ function saveHeroImage() {
 
   if (fileInput.files && fileInput.files[0]) {
     var file = fileInput.files[0];
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      saveUrl(e.target.result);
-      if (typeof fbUploadFileToStorage === 'function') {
-        fbUploadFileToStorage(file, 'hero').then(function(downloadUrl) {
-          localStorage.setItem('mjHeroImage', downloadUrl);
-          document.getElementById('heroPreview').src = downloadUrl;
-          if (typeof fbSaveHero === 'function') fbSaveHero(downloadUrl).catch(function() {});
-        }).catch(function() {});
-      }
-    };
-    reader.readAsDataURL(file);
+    if (typeof fbCompressImage === 'function') {
+      fbCompressImage(file, 800, 800, 0.6).then(function(dataUrl) {
+        saveUrl(dataUrl);
+      });
+    } else {
+      var reader = new FileReader();
+      reader.onload = function(e) { saveUrl(e.target.result); };
+      reader.readAsDataURL(file);
+    }
+    if (typeof fbUploadFileToStorage === 'function') {
+      fbUploadFileToStorage(file, 'hero').then(function(downloadUrl) {
+        localStorage.setItem('mjHeroImage', downloadUrl);
+        document.getElementById('heroPreview').src = downloadUrl;
+        if (typeof fbSaveHero === 'function') fbSaveHero(downloadUrl).catch(function() {});
+      }).catch(function() {});
+    }
     return;
   }
 
@@ -1123,34 +1131,47 @@ document.getElementById('prodImageFile').addEventListener('change', function(e) 
     return;
   }
   var status = document.getElementById('prodImageStatus');
-  status.textContent = 'Reading ' + files.length + ' image(s)...';
+  status.textContent = 'Processing ' + files.length + ' image(s)...';
   status.style.color = 'var(--muted)';
   var dataUrls = [];
   var total = files.length;
   var readDone = 0;
   for (var fi = 0; fi < files.length; fi++) {
     (function(file, idx) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        dataUrls[idx] = e.target.result;
-        readDone++;
-        if (readDone === total) {
-          window._uploadedImages = (window._uploadedImages || []).concat(dataUrls);
-          renderImagePreview();
-          status.textContent = dataUrls.length + ' image(s) loaded';
-          status.style.color = 'var(--green)';
-        }
-        if (typeof fbUploadFileToStorage === 'function') {
-          fbUploadFileToStorage(file, 'products').then(function(url) {
-            dataUrls[idx] = url;
-            window._uploadedImages = dataUrls.slice();
+      if (typeof fbCompressImage === 'function') {
+        fbCompressImage(file, 800, 800, 0.6).then(function(dataUrl) {
+          dataUrls[idx] = dataUrl;
+          readDone++;
+          if (readDone === total) {
+            window._uploadedImages = (window._uploadedImages || []).concat(dataUrls);
             renderImagePreview();
-            status.textContent = 'Uploaded to Firebase Storage';
+            status.textContent = dataUrls.length + ' image(s) loaded';
             status.style.color = 'var(--green)';
-          }).catch(function() {});
-        }
-      };
-      reader.readAsDataURL(file);
+          }
+          if (typeof fbUploadFileToStorage === 'function') {
+            fbUploadFileToStorage(file, 'products').then(function(url) {
+              dataUrls[idx] = url;
+              window._uploadedImages = dataUrls.slice();
+              renderImagePreview();
+              status.textContent = 'Uploaded to Firebase Storage';
+              status.style.color = 'var(--green)';
+            }).catch(function() {});
+          }
+        });
+      } else {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          dataUrls[idx] = e.target.result;
+          readDone++;
+          if (readDone === total) {
+            window._uploadedImages = (window._uploadedImages || []).concat(dataUrls);
+            renderImagePreview();
+            status.textContent = dataUrls.length + ' image(s) loaded';
+            status.style.color = 'var(--green)';
+          }
+        };
+        reader.readAsDataURL(file);
+      }
     })(files[fi], fi);
   }
 });
