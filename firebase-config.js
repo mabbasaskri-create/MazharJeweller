@@ -44,7 +44,7 @@ function fbDeleteProduct(id) {
 }
 
 function fbGetCollections() {
-  return db.collection(FB_COLLECTIONS_COL).orderBy('order', 'asc').get().then(function(snap) {
+  return db.collection(FB_COLLECTIONS_COL).get().then(function(snap) {
     var list = [];
     snap.forEach(function(doc) {
       var d = doc.data();
