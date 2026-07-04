@@ -142,7 +142,9 @@ function fbUploadToStorage(dataUrl, folder) {
 
 function fbUploadFileToStorage(file, folder) {
   return fbCompressImage(file, 800, 800, 0.6).then(function(dataUrl) {
-    return fbUploadToStorage(dataUrl, folder);
+    return fbUploadToStorage(dataUrl, folder).catch(function() {
+      return dataUrl;
+    });
   });
 }
 

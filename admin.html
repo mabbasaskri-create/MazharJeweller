@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel | Mazhar Jewellers</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -379,9 +380,11 @@ tr:hover td{background:#faf8f4}
         </div>
         <div class="card-body" id="collectionImagesBody" style="padding:1.25rem">
         </div>
-        <div style="padding:0 1.25rem 1.25rem">
+        <div style="padding:0 1.25rem 1.25rem;display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn" onclick="resetCollectionImages()" style="background:var(--red);color:#fff">Reset to Default</button>
+          <button class="btn" onclick="fixCors()" style="background:var(--blue);color:#fff">Fix Upload Issues</button>
         </div>
+        <div id="corsStatus" style="display:none;padding:10px 1.25rem;font-size:12px"></div>
       </div>
     </div>
 
@@ -408,6 +411,7 @@ tr:hover td{background:#faf8f4}
             </div>
             <button class="btn" onclick="saveHeroImage()" style="margin-top:0.5rem">Save Hero Image</button>
             <button class="btn" onclick="resetHeroImage()" style="margin-top:0.5rem;margin-left:0.5rem;background:var(--red);color:#fff">Reset to Default</button>
+            <button class="btn" onclick="fixCors()" style="margin-top:0.5rem;margin-left:0.5rem;background:var(--blue);color:#fff">Fix Upload Issues</button>
           </div>
         </div>
       </div>
@@ -1008,10 +1012,10 @@ function updateCollectionImage(id) {
       document.getElementById('colImg_' + id).placeholder = 'Uploading...';
       fbUploadFileToStorage(file, 'collections').then(function(downloadUrl) {
         saveUrl(downloadUrl);
-      }).catch(function() {
-        var reader = new FileReader();
-        reader.onload = function(e) { saveUrl(e.target.result); };
-        reader.readAsDataURL(file);
+      });
+    } else if (typeof fbCompressImage === 'function') {
+      fbCompressImage(file, 800, 800, 0.6).then(function(dataUrl) {
+        saveUrl(dataUrl);
       });
     } else {
       var reader = new FileReader();
@@ -1075,18 +1079,10 @@ function saveHeroImage() {
     if (typeof fbUploadFileToStorage === 'function') {
       fbUploadFileToStorage(file, 'hero').then(function(downloadUrl) {
         saveUrl(downloadUrl);
-      }).catch(function() {
-        var reader = new FileReader();
-        reader.onload = function(e) { saveUrl(e.target.result); };
-        reader.readAsDataURL(file);
       });
     } else if (typeof fbCompressImage === 'function') {
       fbCompressImage(file, 1200, 1200, 0.7).then(function(dataUrl) {
         saveUrl(dataUrl);
-      }).catch(function() {
-        var reader = new FileReader();
-        reader.onload = function(e) { saveUrl(e.target.result); };
-        reader.readAsDataURL(file);
       });
     } else {
       var reader = new FileReader();
@@ -1110,6 +1106,99 @@ function resetHeroImage() {
   if (typeof fbSaveHero === 'function') fbSaveHero('').catch(function() {});
   alert('Hero image reset to default.');
 }
+
+var _corsAccessToken = null;
+function setCorsStatus(msg, type) {
+  var el = document.getElementById('corsStatus');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.background = type === 'success' ? '#e6f4ea' : type === 'error' ? '#fce8e6' : '#e8f0fe';
+  el.style.color = type === 'success' ? '#1e7e34' : type === 'error' ? '#c5221f' : '#1a73e8';
+}
+
+function fixCors() {
+  var BUCKETS = ['mazhar-jewellers-c502a.firebasestorage.app', 'mazhar-jewellers-c502a.appspot.com'];
+
+  if (_corsAccessToken) {
+    tryBucket(0, BUCKETS, _corsAccessToken);
+    return;
+  }
+
+  setCorsStatus('Opening Google sign-in...', '');
+  try {
+    var client = google.accounts.oauth2.initTokenClient({
+      client_id: '516909002122-6cc9d844506486827aec73.apps.googleusercontent.com',
+      scope: 'https://www.googleapis.com/auth/devstorage.full_control',
+      callback: function(resp) {
+        if (resp && resp.access_token) {
+          _corsAccessToken = resp.access_token;
+          setCorsStatus('Signed in! Setting CORS...', '');
+          tryBucket(0, BUCKETS, _corsAccessToken);
+        } else {
+          setCorsStatus('Sign-in failed. Try again.', 'error');
+        }
+      },
+      error_callback: function() {
+        setCorsStatus('Sign-in failed. Try again.', 'error');
+      }
+    });
+    client.requestAccessToken();
+  } catch(e) {
+    setCorsStatus('Error: ' + e.message, 'error');
+  }
+}
+
+function tryBucket(idx, buckets, token) {
+  if (idx >= buckets.length) {
+    setCorsStatus('Could not find bucket. Try using fix-cors.html page.', 'error');
+    return;
+  }
+  var bucket = buckets[idx];
+  setCorsStatus('Checking bucket: ' + bucket + '...', '');
+  fetch('https://storage.googleapis.com/storage/v1/b/' + bucket, {
+    method: 'GET',
+    headers: { 'Authorization': 'Bearer ' + token }
+  }).then(function(res) {
+    if (res.ok) {
+      applyCors(bucket, token);
+    } else if (res.status === 404) {
+      tryBucket(idx + 1, buckets, token);
+    } else {
+      return res.json().then(function(d) {
+        throw new Error((d.error && d.error.message) || 'Status ' + res.status);
+      });
+    }
+  }).catch(function(err) {
+    setCorsStatus('Error: ' + err.message, 'error');
+  });
+}
+
+function applyCors(bucket, token) {
+  setCorsStatus('Applying CORS to ' + bucket + '...', '');
+  fetch('https://storage.googleapis.com/storage/v1/b/' + bucket, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': 'Bearer ' + token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      cors: [{
+        origin: ['https://mazhar-jeweller.vercel.app'],
+        method: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD'],
+        responseHeader: ['*'],
+        maxAgeSeconds: 3600
+      }]
+    })
+  }).then(function(res) {
+    if (res.ok) {
+      setCorsStatus('CORS set successfully! Images will now upload.', 'success');
+    } else {
+      return res.json().then(function(d) { throw new Error((d.error && d.error.message) || 'Failed'); });
+    }
+  }).catch(function(err) {
+    setCorsStatus('Error: ' + err.message + '. Try fix-cors.html page.', 'error');
+  });
+}
 </script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -1132,11 +1221,6 @@ document.getElementById('prodImageFile').addEventListener('change', function(e) 
     return;
   }
   var status = document.getElementById('prodImageStatus');
-  if (typeof fbUploadFileToStorage !== 'function') {
-    status.textContent = 'Upload not available';
-    status.style.color = 'var(--red)';
-    return;
-  }
   status.textContent = 'Uploading ' + files.length + ' image(s)...';
   status.style.color = 'var(--muted)';
   var uploaded = [];
@@ -1150,13 +1234,9 @@ document.getElementById('prodImageFile').addEventListener('change', function(e) 
         if (done === total) {
           window._uploadedImages = (window._uploadedImages || []).concat(uploaded);
           renderImagePreview();
-          status.textContent = uploaded.length + ' image(s) uploaded to Storage';
+          status.textContent = uploaded.length + ' image(s) uploaded';
           status.style.color = 'var(--green)';
         }
-      }).catch(function(err) {
-        done++;
-        status.textContent = 'Upload failed: ' + err.message;
-        status.style.color = 'var(--red)';
       });
     })(files[fi]);
   }
