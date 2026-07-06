@@ -515,7 +515,6 @@ function placeOrder() {
 }
 
 function sendConfirmationEmail(order) {
-  if (typeof emailjs === 'undefined') return;
   var orderId = 'MJ-' + Date.now().toString().slice(-6);
   var orders = order.items.map(function(item) {
     var meta = [item.size, item.color].filter(Boolean).join(' - ');
@@ -525,18 +524,28 @@ function sendConfirmationEmail(order) {
       price: Number(item.price * item.qty).toLocaleString('en-PK')
     };
   });
-  console.log('EmailJS Debug:', { service: 'service_jzag514', template: 'template_t9xmxve', email: order.email, order_id: orderId });
-  emailjs.send('service_jzag514', 'template_t9xmxve', {
-    email: order.email,
-    to_name: order.fullName,
-    order_id: orderId,
-    orders: orders,
-    cost: { shipping: 0, tax: 0, total: Number(order.total).toLocaleString('en-PK') }
-  }).then(function() {
-    console.log('Confirmation email sent to ' + order.email);
-  }, function(err) {
-    console.error('Email FAILED details:', JSON.stringify(err));
-    alert('Email send failed. Check console for details.');
+  var payload = {
+    service_id: 'service_jzag514',
+    template_id: 'template_t9xmxve',
+    user_id: 'TKPIh5risCZU6Ghf3',
+    template_params: {
+      email: order.email,
+      to_name: order.fullName,
+      order_id: orderId,
+      orders: orders,
+      cost: { shipping: 0, tax: 0, total: Number(order.total).toLocaleString('en-PK') }
+    }
+  };
+  console.log('EmailJS Payload:', JSON.stringify(payload, null, 2));
+  fetch('https://api.emailjs.com/api/v1.0/email/send', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(function(r) {
+    if (!r.ok) return r.text().then(function(t) { throw new Error(r.status + ' - ' + t); });
+    console.log('Email sent OK');
+  }).catch(function(e) {
+    console.error('Email failed:', e.message);
   });
 }
 
