@@ -315,8 +315,12 @@ function renderOrderSummary() {
     var itemTotal = (item.price || 0) * (item.qty || 1);
     total += itemTotal;
     var meta = [item.size, item.color].filter(Boolean).join(' / ');
+    var imgUrl = item.image || '';
+    if (imgUrl && !imgUrl.match(/^https?:\/\//)) {
+      imgUrl = window.location.origin + '/' + imgUrl.replace(/^\/+/, '');
+    }
     return '<div class="order-item">' +
-      '<img src="' + (item.image || '') + '" alt="' + (item.name || '').replace(/"/g, '&quot;') + '">' +
+      '<img src="' + imgUrl + '" alt="' + (item.name || '').replace(/"/g, '&quot;') + '" onerror="this.style.display=\'none\'">' +
       '<div class="order-item-info">' +
         '<div class="order-item-name">' + (item.name || '') + '</div>' +
         (meta ? '<div class="order-item-meta">' + meta + ' — Qty: ' + item.qty + '</div>' : '<div class="order-item-meta">Qty: ' + item.qty + '</div>') +

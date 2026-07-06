@@ -212,8 +212,12 @@
       var itemTotal = (item.price || 0) * (item.qty || 1);
       total += itemTotal;
       var meta = [item.size, item.color].filter(Boolean).join(' / ');
+      var imgUrl = item.image || '';
+      if (imgUrl && !imgUrl.match(/^https?:\/\//)) {
+        imgUrl = window.location.origin + '/' + imgUrl.replace(/^\/+/, '');
+      }
       return '<div class="mj-cart-item">' +
-        '<img src="' + (item.image || '') + '" alt="' + (item.name || '').replace(/"/g, '&quot;') + '">' +
+        '<img src="' + imgUrl + '" alt="' + (item.name || '').replace(/"/g, '&quot;') + '" onerror="this.style.display=\'none\'">' +
         '<div class="mj-cart-item-info">' +
           '<div class="mj-cart-item-name">' + (item.name || '') + '</div>' +
           (meta ? '<div class="mj-cart-item-meta">' + meta + '</div>' : '') +
@@ -522,6 +526,22 @@
         removeFromCart(idx);
         renderCartPanel();
         showToast('Removed from cart');
+        return;
+      }
+
+      var addBtn = e.target.closest('.prod-add');
+      if (addBtn) {
+        e.preventDefault();
+        var card = addBtn.closest('.prod-card');
+        var wishBtn = card && card.querySelector('.prod-wish');
+        var id = wishBtn && wishBtn.getAttribute('data-product-id');
+        if (id && typeof getProductById === 'function' && typeof addToCart === 'function') {
+          var p = getProductById(id);
+          if (p) {
+            addToCart(p);
+            showToast('Added to cart ✓');
+          }
+        }
         return;
       }
     });

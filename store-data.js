@@ -264,12 +264,16 @@ function saveCart(cart) {
 
 function addToCart(item) {
   if (!item || !item.id) return;
+  var imgUrl = item.image || '';
+  if (imgUrl && !imgUrl.match(/^https?:\/\//)) {
+    imgUrl = window.location.origin + '/' + imgUrl.replace(/^\/+/, '');
+  }
   var cart = getCart();
   var existing = cart.findIndex(function(x) { return x.id === item.id && x.size === (item.size||'') && x.color === (item.color||''); });
   if (existing >= 0) {
     cart[existing].qty += (item.qty || 1);
   } else {
-    cart.push({ id: item.id, name: item.name, price: item.price, image: item.image, size: item.size || '', color: item.color || '', qty: item.qty || 1 });
+    cart.push({ id: item.id, name: item.name, price: item.price, image: imgUrl, size: item.size || '', color: item.color || '', qty: item.qty || 1 });
   }
   saveCart(cart);
   if (window.MJStoreUI && typeof window.MJStoreUI.refreshCartUI === 'function') {

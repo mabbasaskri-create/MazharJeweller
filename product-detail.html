@@ -403,11 +403,15 @@ function addToCart() {
     var stored = localStorage.getItem('mjCart');
     if (stored) cart = JSON.parse(stored);
   } catch(e) {}
+  var imgUrl = p.image || '';
+  if (imgUrl && !imgUrl.match(/^https?:\/\//)) {
+    imgUrl = window.location.origin + '/' + imgUrl.replace(/^\/+/, '');
+  }
   var item = {
     id: p.id,
     name: p.name,
     price: p.price,
-    image: p.image,
+    image: imgUrl,
     size: selectedSize,
     color: selectedColor,
     qty: quantity
