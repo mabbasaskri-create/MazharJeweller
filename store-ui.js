@@ -134,6 +134,7 @@
       '.mj-cart-item{display:flex;gap:.85rem;padding:1rem 1.25rem;border-bottom:1px solid #e8e0d4;align-items:center}' +
       '.mj-cart-item img{width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid #e8e0d4;flex-shrink:0}' +
       '.mj-cart-item-info{flex:1;min-width:0}' +
+      '.mj-cart-item-no-img{padding-left:1.25rem!important}' +
       '.mj-cart-item-name{font-size:13px;font-weight:500;color:#0a0a0a;margin-bottom:2px;line-height:1.4}' +
       '.mj-cart-item-meta{font-size:10px;color:#888;margin-bottom:4px}' +
       '.mj-cart-item-price{font-size:12px;color:#b8965a;margin-bottom:6px}' +
@@ -213,11 +214,11 @@
       total += itemTotal;
       var meta = [item.size, item.color].filter(Boolean).join(' / ');
       var imgUrl = item.image || '';
-      if (imgUrl && !imgUrl.match(/^https?:\/\//)) {
+      if (imgUrl && !imgUrl.match(/^(https?:\/\/|data:)/)) {
         imgUrl = window.location.origin + '/' + imgUrl.replace(/^\/+/, '');
       }
-      return '<div class="mj-cart-item">' +
-        '<img src="' + imgUrl + '" alt="' + (item.name || '').replace(/"/g, '&quot;') + '" onerror="this.style.display=\'none\'">' +
+      return '<div class="mj-cart-item' + (imgUrl ? '' : ' mj-cart-item-no-img') + '">' +
+        (imgUrl ? '<img src="' + imgUrl + '" alt="' + (item.name || '').replace(/"/g, '&quot;') + '" onerror="this.onerror=null;this.src=\'\';this.style.display=\'none\'">' : '') +
         '<div class="mj-cart-item-info">' +
           '<div class="mj-cart-item-name">' + (item.name || '') + '</div>' +
           (meta ? '<div class="mj-cart-item-meta">' + meta + '</div>' : '') +

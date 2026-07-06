@@ -265,7 +265,7 @@ function saveCart(cart) {
 function addToCart(item) {
   if (!item || !item.id) return;
   var imgUrl = item.image || '';
-  if (imgUrl && !imgUrl.match(/^https?:\/\//)) {
+  if (imgUrl && !imgUrl.match(/^(https?:\/\/|data:)/)) {
     imgUrl = window.location.origin + '/' + imgUrl.replace(/^\/+/, '');
   }
   var cart = getCart();

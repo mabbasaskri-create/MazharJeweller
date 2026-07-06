@@ -404,7 +404,10 @@ function addToCart() {
     if (stored) cart = JSON.parse(stored);
   } catch(e) {}
   var imgUrl = p.image || '';
-  if (imgUrl && !imgUrl.match(/^https?:\/\//)) {
+  if (productPhotos && productPhotos.length > 0 && !imgUrl) {
+    imgUrl = productPhotos[0];
+  }
+  if (imgUrl && !imgUrl.match(/^(https?:\/\/|data:)/)) {
     imgUrl = window.location.origin + '/' + imgUrl.replace(/^\/+/, '');
   }
   var item = {
@@ -425,6 +428,9 @@ function addToCart() {
   try { localStorage.setItem('mjCart', JSON.stringify(cart)); } catch(e) {}
   if (window.MJStoreUI && typeof window.MJStoreUI.refreshCartUI === 'function') {
     window.MJStoreUI.refreshCartUI();
+  }
+  if (window.MJStoreUI && typeof window.MJStoreUI.openCart === 'function') {
+    window.MJStoreUI.openCart();
   }
   showToast('Added to cart ✓');
   quantity = 1;
