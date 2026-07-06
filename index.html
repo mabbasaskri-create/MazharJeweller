@@ -5,6 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mazhar Jewellers | Premium Crystal Jewellery</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://www.gstatic.com">
+<link rel="preconnect" href="https://firestore.googleapis.com">
+<link rel="preconnect" href="https://mazhar-jewellers-c502a.firebasestorage.app">
+<link rel="dns-prefetch" href="https://www.gstatic.com">
+<link rel="dns-prefetch" href="https://firestore.googleapis.com"> 
+<link rel="dns-prefetch" href="https://mazhar-jewellers-c502a.firebasestorage.app">
+<link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js">
+<script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+<script defer src="firebase-config.js"></script>
+<script defer src="store-data.js"></script>
+<script defer src="store-ui.js"></script>
+<script defer src="nav-auth.js"></script>
+<script defer src="whatsapp-float.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -314,6 +330,14 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem}
 .cat-card2 .cat-label{position:absolute;bottom:0;left:0;right:0;padding:.6rem .8rem;color:var(--white);font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;text-align:center}
 .cat-card2 .cat-count{position:absolute;top:8px;right:8px;background:var(--gold);color:var(--white);font-size:8px;letter-spacing:1px;padding:3px 7px;border-radius:3px;font-weight:500}
 .h-scroll-item.cat-card2{border-radius:14px;overflow:hidden}
+
+.skel-track{display:flex;gap:1.5rem}
+.skel-card{flex-shrink:0;width:calc((100% - 4.5rem)/4);min-width:200px}
+.skel-img{aspect-ratio:3/4;background:linear-gradient(110deg,var(--gold-pale) 30%,#e8e0d4 50%,var(--gold-pale) 70%);background-size:200% 100%;animation:skel-shine 1.5s ease infinite;border-radius:10px;margin-bottom:.75rem}
+.skel-line{height:12px;background:linear-gradient(110deg,var(--gold-pale) 30%,#e8e0d4 50%,var(--gold-pale) 70%);background-size:200% 100%;animation:skel-shine 1.5s ease infinite;border-radius:6px;margin-bottom:8px}
+.skel-line.w60{width:60%}.skel-line.w40{width:40%}.skel-line.w30{width:30%}
+@keyframes skel-shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@media(max-width:767px){.skel-card{width:65vw;min-width:auto}.skel-img{aspect-ratio:1/1}}
 </style>
 </head>
 <body>
@@ -649,8 +673,10 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem}
 (function(){var p=window.location.pathname.split('/').pop()||'index.html';if(p==='index.html')p='home.html';document.querySelectorAll('.nav-links a').forEach(function(a){if(a.getAttribute('href')===p)a.classList.add('active')})})();
 </script>
 <script>
-document.addEventListener('DOMContentLoaded',function(){
+function initHorizontalScroll(){
   document.querySelectorAll('.h-scroll-wrap').forEach(function(wrap){
+    if(wrap.classList.contains('hs-initialized'))return;
+    wrap.classList.add('hs-initialized');
     var track=wrap.querySelector('.h-scroll');
     var prev=wrap.querySelector('.h-scroll-btn.prev');
     var next=wrap.querySelector('.h-scroll-btn.next');
@@ -707,17 +733,13 @@ document.addEventListener('DOMContentLoaded',function(){
       if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();track.scrollLeft+=e.deltaX}
     },{passive:false});
   });
-});
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHorizontalScroll);
+} else {
+  initHorizontalScroll();
+}
 </script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
-<script src="firebase-config.js"></script>
-<script src="store-data.js"></script>
-<script src="store-ui.js"></script>
-<script src="nav-auth.js"></script>
-<script src="whatsapp-float.js"></script>
 <script>var _hero=localStorage.getItem('mjHeroImage');if(_hero){document.getElementById('heroImg').src=_hero;}</script>
 </body>
 </html>

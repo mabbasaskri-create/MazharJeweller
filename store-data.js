@@ -57,7 +57,11 @@ function renderProductScroll(containerId, products) {
   var container = document.getElementById(containerId);
   if (!container) return;
   if (!products || products.length === 0) {
-    container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px">No products yet. Add some from the admin panel.</div>';
+    if (document.body.classList.contains('fb-loading')) {
+      container.innerHTML = '<div class="skel-track">' + Array(4).fill('<div class="skel-card"><div class="skel-img"></div><div class="skel-line w60"></div><div class="skel-line w40"></div><div class="skel-line w30"></div></div>').join('') + '</div>';
+    } else {
+      container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px">No products yet. Add some from the admin panel.</div>';
+    }
     return;
   }
   container.innerHTML = products.map(productCardHTML).join('');
@@ -67,7 +71,11 @@ function renderProductGrid(containerId, products) {
   var container = document.getElementById(containerId);
   if (!container) return;
   if (!products || products.length === 0) {
-    container.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:var(--muted);font-size:13px">No products in this category yet.</div>';
+    if (document.body.classList.contains('fb-loading')) {
+      container.innerHTML = Array(4).fill('<div class="skel-card"><div class="skel-img"></div><div class="skel-line w60"></div><div class="skel-line w40"></div><div class="skel-line w30"></div></div>').join('');
+    } else {
+      container.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:var(--muted);font-size:13px">No products in this category yet.</div>';
+    }
     return;
   }
   container.innerHTML = products.map(function(p) {
@@ -102,12 +110,23 @@ function syncFromFirestore(callback) {
     if (callback) callback();
     return;
   }
+  document.body.classList.add('fb-loading');
+  if (typeof fbGetProductsCached === 'function') {
+    fbGetProductsCached().then(function(list) {
+      if (list && list.length > 0) {
+        saveProductsToStorage(list);
+        reRenderAll();
+      }
+    }).catch(function() {});
+  }
   fbGetProducts().then(function(list) {
     if (list && list.length > 0) {
       saveProductsToStorage(list);
     }
+    document.body.classList.remove('fb-loading');
     if (callback) callback();
   }).catch(function() {
+    document.body.classList.remove('fb-loading');
     if (callback) callback();
   });
   if (typeof fbGetHero === 'function') {

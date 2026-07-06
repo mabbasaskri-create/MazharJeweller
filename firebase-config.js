@@ -12,12 +12,26 @@ firebase.initializeApp(FIREBASE_CONFIG);
 var db = firebase.firestore();
 var fstorage = firebase.storage();
 
+firebase.firestore().enablePersistence({ synchronizeTabs: true }).catch(function() {});
+
 var FB_PRODUCTS_COL = 'products';
 var FB_COLLECTIONS_COL = 'collections';
 var FB_PRODUCT_PHOTOS_COL = 'product_photos';
 
 function fbGetProducts() {
   return db.collection(FB_PRODUCTS_COL).orderBy('createdAt', 'desc').get().then(function(snap) {
+    var list = [];
+    snap.forEach(function(doc) {
+      var d = doc.data();
+      d.id = doc.id;
+      list.push(d);
+    });
+    return list;
+  });
+}
+
+function fbGetProductsCached() {
+  return db.collection(FB_PRODUCTS_COL).orderBy('createdAt', 'desc').get({ source: 'cache' }).then(function(snap) {
     var list = [];
     snap.forEach(function(doc) {
       var d = doc.data();
