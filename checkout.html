@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkout | Mazhar Jewellers</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -18,6 +18,7 @@
   --muted:#888;
   --border:#e8e0d4;
   --red:#c0392b;
+  --green:#22c55e;
 }
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden}
@@ -51,31 +52,46 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .checkout-page h1{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:.5rem}
 .checkout-page .sub{font-size:12px;color:var(--muted);margin-bottom:2rem;line-height:1.7}
 
-.form-group{margin-bottom:1.25rem}
-.form-group label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:6px;font-weight:500}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:4px;font-size:13px;font-family:'Inter',sans-serif;color:var(--black);background:var(--white);outline:none;transition:border-color .2s}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold)}
-.form-group textarea{resize:vertical;min-height:80px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.checkout-section{margin-bottom:2rem;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:1.5rem}
+.checkout-section h2{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--black);margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.checkout-section h2 .step{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--gold);color:var(--white);font-size:11px;font-weight:500;border-radius:50%;margin-right:10px;font-family:'Inter',sans-serif}
 
-.order-summary{background:var(--gold-pale);border:1px solid var(--border);border-radius:8px;padding:1.5rem;position:sticky;top:calc(64px + 1.5rem)}
-.order-summary h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:11px;font-weight:500;color:var(--mid);margin-bottom:5px}
+.form-group label .req{color:var(--red);margin-left:2px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'Inter',sans-serif;color:var(--black);background:var(--white);outline:none;transition:border-color .2s,box-shadow .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,150,90,.12)}
+.form-group textarea{resize:vertical;min-height:70px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+
+.payment-section .form-group select{background:var(--white)}
+
+.order-summary{background:var(--gold-pale);border:1px solid var(--border);border-radius:12px;padding:1.5rem;position:sticky;top:calc(64px + 1.5rem)}
+.order-summary h2{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
 .order-item{display:flex;gap:.85rem;padding:.75rem 0;border-bottom:1px solid var(--border);align-items:center}
 .order-item:last-child{border-bottom:none}
-.order-item img{width:56px;height:56px;object-fit:cover;border-radius:6px;border:1px solid var(--border);flex-shrink:0;background:#fff}
+.order-item img{width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--border);flex-shrink:0;background:#fff}
 .order-item-info{flex:1;min-width:0}
 .order-item-name{font-size:12px;font-weight:500;color:var(--black);margin-bottom:2px;line-height:1.3}
 .order-item-meta{font-size:10px;color:var(--muted)}
 .order-item-price{font-size:12px;color:var(--gold);white-space:nowrap}
-.order-total{display:flex;justify-content:space-between;padding-top:1rem;margin-top:.5rem;font-size:16px;font-weight:600;color:var(--black)}
+.order-subtotal,.order-shipping{display:flex;justify-content:space-between;padding:.6rem 0;font-size:12px;color:var(--mid)}
+.order-shipping{border-top:1px solid var(--border);margin-top:.25rem}
+.order-total{display:flex;justify-content:space-between;padding-top:.85rem;margin-top:.25rem;border-top:2px solid var(--black);font-size:16px;font-weight:600;color:var(--black)}
 .order-total span:last-child{color:var(--gold)}
 
-.place-order{width:100%;background:var(--black);color:var(--white);padding:14px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;border:none;margin-top:1.25rem;transition:background .2s}
+.place-order{width:100%;background:var(--black);color:var(--white);padding:14px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;border:none;margin-top:1.25rem;transition:background .2s;border-radius:6px}
 .place-order:hover{background:var(--charcoal)}
 
 .empty-checkout{text-align:center;padding:5rem 1.5rem;grid-column:1/-1}
 .empty-checkout p{font-size:14px;color:var(--muted);margin-bottom:1rem}
 .empty-checkout a{color:var(--gold);text-decoration:underline;font-size:13px}
+
+.store-credit{font-size:11px;color:var(--muted);text-align:center;padding-top:.75rem;margin-top:.75rem;border-top:1px solid var(--border);line-height:1.6}
+
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-bottom:1.5rem;transition:color .2s}
+.back-link:hover{color:var(--gold)}
 
 footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem;margin-top:3rem}
 .footer-inner{max-width:1400px;margin:0 auto}
@@ -111,8 +127,9 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem;m
   .topbar{font-size:9px;letter-spacing:1px;padding:8px .75rem}
   .nav-inner{padding:0 1rem;height:58px}
   .logo{font-size:20px;letter-spacing:2px}
-  .checkout-page{padding:2rem 1.25rem}
-  .form-row{grid-template-columns:1fr}
+  .checkout-page{padding:1.5rem 1rem}
+  .checkout-section{padding:1.25rem}
+  .form-row,.form-row-3{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr}
   .footer-bottom{flex-direction:column;align-items:flex-start}
 }
@@ -154,7 +171,7 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem;m
   <a href="earrings.html">Earrings</a>
   <a href="rings.html">Rings</a>
   <a href="bracelets.html">Bracelets</a>
-  <a href="gemstones.html">Gemstones</a>
+  <a href="gemstones.html">GemStones</a>
 </div>
 
 <div class="checkout-page">
@@ -165,38 +182,70 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem;m
 
   <div id="checkoutForm" style="display:none">
     <div>
+      <a href="javascript:history.back()" class="back-link">← Back to Shopping</a>
       <h1>Checkout</h1>
       <p class="sub">Apni details darj karein aur order confirm karein.</p>
 
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="cName" placeholder="Ali Ahmed">
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>Phone</label>
-          <input type="tel" id="cPhone" placeholder="03XX-XXXXXXX">
-        </div>
-        <div class="form-group">
-          <label>Email (optional)</label>
-          <input type="email" id="cEmail" placeholder="ali@example.com">
+      <div class="checkout-section">
+        <h2><span class="step">1</span>Contact Information</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" id="cEmail" placeholder="ali@example.com">
+          </div>
+          <div class="form-group">
+            <label>Phone <span class="req">*</span></label>
+            <input type="tel" id="cPhone" placeholder="03XX-XXXXXXX">
+          </div>
         </div>
       </div>
 
-      <div class="form-group">
-        <label>City</label>
-        <input type="text" id="cCity" placeholder="Lahore">
-      </div>
-
-      <div class="form-group">
-        <label>Complete Address</label>
-        <textarea id="cAddress" placeholder="House #, Street, Area, Landmark"></textarea>
-      </div>
-
-      <div class="form-row">
+      <div class="checkout-section">
+        <h2><span class="step">2</span>Shipping Address</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" id="cFirstName" placeholder="Ali">
+          </div>
+          <div class="form-group">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" id="cLastName" placeholder="Ahmed">
+          </div>
+        </div>
         <div class="form-group">
-          <label>Payment Method</label>
+          <label>Address <span class="req">*</span></label>
+          <input type="text" id="cAddress" placeholder="House #, Street, Area">
+        </div>
+        <div class="form-group">
+          <label>Apartment, Suite, etc. (optional)</label>
+          <input type="text" id="cApartment" placeholder="Floor, Office, Landmark">
+        </div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label>City <span class="req">*</span></label>
+            <input type="text" id="cCity" placeholder="Lahore">
+          </div>
+          <div class="form-group">
+            <label>Province</label>
+            <input type="text" id="cProvince" placeholder="Punjab">
+          </div>
+          <div class="form-group">
+            <label>Postal Code</label>
+            <input type="text" id="cPostal" placeholder="54000">
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-section">
+        <h2><span class="step">3</span>Order Notes (optional)</h2>
+        <div class="form-group">
+          <textarea id="cNotes" placeholder="Koi special instructions? Delivery timing, gift wrapping, etc."></textarea>
+        </div>
+      </div>
+
+      <div class="checkout-section payment-section">
+        <h2><span class="step">4</span>Payment Method</h2>
+        <div class="form-group">
           <select id="cPayment">
             <option value="cod">Cash on Delivery (COD)</option>
             <option value="jazzcash">JazzCash</option>
@@ -207,14 +256,23 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem;m
     </div>
 
     <div>
-      <div class="order-summary">
+      <div class="order-summary" id="orderSummary">
         <h2>Order Summary</h2>
         <div id="orderItems"></div>
+        <div class="order-subtotal">
+          <span>Subtotal</span>
+          <span id="orderSubtotal">PKR 0</span>
+        </div>
+        <div class="order-shipping">
+          <span>Shipping</span>
+          <span id="orderShipping">FREE</span>
+        </div>
         <div class="order-total">
           <span>Total</span>
           <span id="orderTotal">PKR 0</span>
         </div>
         <button class="place-order" onclick="placeOrder()">Place Order</button>
+        <div class="store-credit">🔒 Secure checkout · Free delivery over PKR 5,000</div>
       </div>
     </div>
   </div>
@@ -301,6 +359,7 @@ function renderOrderSummary() {
   var formEl = document.getElementById('checkoutForm');
   var itemsEl = document.getElementById('orderItems');
   var totalEl = document.getElementById('orderTotal');
+  var subtotalEl = document.getElementById('orderSubtotal');
 
   if (cart.length === 0) {
     emptyEl.style.display = '';
@@ -316,17 +375,18 @@ function renderOrderSummary() {
     total += itemTotal;
     var meta = [item.size, item.color].filter(Boolean).join(' / ');
     var imgUrl = item.image || '';
-    if (imgUrl && !imgUrl.match(/^https?:\/\//)) {
+    if (imgUrl && !imgUrl.match(/^(https?:\/\/|data:)/)) {
       imgUrl = window.location.origin + '/' + imgUrl.replace(/^\/+/, '');
     }
     return '<div class="order-item">' +
-      '<img src="' + imgUrl + '" alt="' + (item.name || '').replace(/"/g, '&quot;') + '" onerror="this.style.display=\'none\'">' +
+      (imgUrl ? '<img src="' + imgUrl + '" alt="' + (item.name || '').replace(/"/g, '&quot;') + '" onerror="this.style.display=\'none\'">' : '') +
       '<div class="order-item-info">' +
         '<div class="order-item-name">' + (item.name || '') + '</div>' +
         (meta ? '<div class="order-item-meta">' + meta + ' — Qty: ' + item.qty + '</div>' : '<div class="order-item-meta">Qty: ' + item.qty + '</div>') +
       '</div>' +
       '<div class="order-item-price">' + formatPrice(itemTotal) + '</div></div>';
   }).join('');
+  subtotalEl.textContent = formatPrice(total);
   totalEl.textContent = formatPrice(total);
 }
 
@@ -336,21 +396,29 @@ function placeOrder() {
     alert('Cart is empty!');
     return;
   }
-  var name = document.getElementById('cName').value.trim();
+  var email = document.getElementById('cEmail').value.trim();
   var phone = document.getElementById('cPhone').value.trim();
-  var city = document.getElementById('cCity').value.trim();
+  var firstName = document.getElementById('cFirstName').value.trim();
+  var lastName = document.getElementById('cLastName').value.trim();
   var address = document.getElementById('cAddress').value.trim();
-  if (!name || !phone || !city || !address) {
-    alert('Meherbani farma kar tamam fields fill karein.');
+  var city = document.getElementById('cCity').value.trim();
+  if (!email || !phone || !firstName || !lastName || !address || !city) {
+    alert('Meherbani farma kar required fields fill karein.');
     return;
   }
   var order = {
     items: cart,
-    name: name,
+    email: email,
     phone: phone,
-    email: document.getElementById('cEmail').value.trim(),
-    city: city,
+    firstName: firstName,
+    lastName: lastName,
+    fullName: firstName + ' ' + lastName,
     address: address,
+    apartment: document.getElementById('cApartment').value.trim(),
+    city: city,
+    province: document.getElementById('cProvince').value.trim(),
+    postal: document.getElementById('cPostal').value.trim(),
+    notes: document.getElementById('cNotes').value.trim(),
     payment: document.getElementById('cPayment').value,
     total: cart.reduce(function(s, x) { return s + x.price * x.qty; }, 0),
     date: new Date().toISOString()
@@ -360,7 +428,7 @@ function placeOrder() {
   if (window.MJStoreUI && typeof window.MJStoreUI.refreshCartUI === 'function') {
     window.MJStoreUI.refreshCartUI();
   }
-  alert('Alhamdulillah! Aapka order confirm ho gaya hai.\n\nOrder details:\n' + name + '\n' + phone + '\n' + city + '\n' + address + '\n\nTotal: ' + formatPrice(order.total) + '\nPayment: ' + order.payment.toUpperCase());
+  alert('Alhamdulillah! Aapka order confirm ho gaya hai.\n\nCustomer: ' + order.fullName + '\nEmail: ' + order.email + '\nPhone: ' + order.phone + '\nAddress: ' + order.address + ', ' + order.city + '\n\nTotal: ' + formatPrice(order.total) + '\nPayment: ' + order.payment.toUpperCase() + '\n\nAapko jald delivery confirm kar di jayegi.');
   renderOrderSummary();
 }
 
