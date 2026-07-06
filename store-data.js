@@ -242,4 +242,74 @@ function reRenderAll() {
   if (window.MJStoreUI && typeof window.MJStoreUI.refreshWishlistUI === 'function') {
     window.MJStoreUI.refreshWishlistUI();
   }
+  if (window.MJStoreUI && typeof window.MJStoreUI.refreshCartUI === 'function') {
+    window.MJStoreUI.refreshCartUI();
+  }
+}
+
+// ===== CART =====
+var CART_KEY = 'mjCart';
+
+function getCart() {
+  try {
+    var stored = localStorage.getItem(CART_KEY);
+    if (stored) return JSON.parse(stored) || [];
+  } catch(e) {}
+  return [];
+}
+
+function saveCart(cart) {
+  try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch(e) {}
+}
+
+function addToCart(item) {
+  if (!item || !item.id) return;
+  var cart = getCart();
+  var existing = cart.findIndex(function(x) { return x.id === item.id && x.size === (item.size||'') && x.color === (item.color||''); });
+  if (existing >= 0) {
+    cart[existing].qty += (item.qty || 1);
+  } else {
+    cart.push({ id: item.id, name: item.name, price: item.price, image: item.image, size: item.size || '', color: item.color || '', qty: item.qty || 1 });
+  }
+  saveCart(cart);
+  if (window.MJStoreUI && typeof window.MJStoreUI.refreshCartUI === 'function') {
+    window.MJStoreUI.refreshCartUI();
+  }
+}
+
+function removeFromCart(index) {
+  var cart = getCart();
+  if (index >= 0 && index < cart.length) {
+    cart.splice(index, 1);
+    saveCart(cart);
+  }
+  if (window.MJStoreUI && typeof window.MJStoreUI.refreshCartUI === 'function') {
+    window.MJStoreUI.refreshCartUI();
+  }
+}
+
+function updateCartQty(index, qty) {
+  var cart = getCart();
+  if (index >= 0 && index < cart.length) {
+    cart[index].qty = Math.max(1, Math.min(99, qty));
+    saveCart(cart);
+  }
+  if (window.MJStoreUI && typeof window.MJStoreUI.refreshCartUI === 'function') {
+    window.MJStoreUI.refreshCartUI();
+  }
+}
+
+function getCartCount() {
+  return getCart().reduce(function(sum, x) { return sum + x.qty; }, 0);
+}
+
+function getCartTotal() {
+  return getCart().reduce(function(sum, x) { return sum + x.price * x.qty; }, 0);
+}
+
+function clearCart() {
+  try { localStorage.removeItem(CART_KEY); } catch(e) {}
+  if (window.MJStoreUI && typeof window.MJStoreUI.refreshCartUI === 'function') {
+    window.MJStoreUI.refreshCartUI();
+  }
 }

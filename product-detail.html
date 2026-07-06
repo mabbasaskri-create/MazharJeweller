@@ -419,6 +419,9 @@ function addToCart() {
     cart.push(item);
   }
   try { localStorage.setItem('mjCart', JSON.stringify(cart)); } catch(e) {}
+  if (window.MJStoreUI && typeof window.MJStoreUI.refreshCartUI === 'function') {
+    window.MJStoreUI.refreshCartUI();
+  }
   showToast('Added to cart ✓');
   quantity = 1;
   document.getElementById('qtyVal').textContent = '1';
