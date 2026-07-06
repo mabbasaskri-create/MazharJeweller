@@ -525,8 +525,8 @@ function sendConfirmationEmail(order) {
       price: Number(item.price * item.qty).toLocaleString('en-PK')
     };
   });
-  console.log('EmailJS Debug:', { service: 'service_jzag514', template: 'template_gocq56u', email: order.email, order_id: orderId });
-  emailjs.send('service_jzag514', 'template_gocq56u', {
+  console.log('EmailJS Debug:', { service: 'service_jzag514', template: 'template_t9xmxve', email: order.email, order_id: orderId });
+  emailjs.send('service_jzag514', 'template_t9xmxve', {
     email: order.email,
     to_name: order.fullName,
     order_id: orderId,
