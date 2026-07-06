@@ -146,6 +146,14 @@ function fbUploadFileToStorage(file, folder) {
   });
 }
 
+var FB_ORDERS_COL = 'orders';
+
+function fbSaveOrder(order) {
+  var o = JSON.parse(JSON.stringify(order));
+  o.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+  return db.collection(FB_ORDERS_COL).add(o);
+}
+
 var FB_SETTINGS_COL = 'settings';
 
 function fbSaveHero(imageUrl) {

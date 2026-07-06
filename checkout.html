@@ -62,6 +62,10 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'Inter',sans-serif;color:var(--black);background:var(--white);outline:none;transition:border-color .2s,box-shadow .2s}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,150,90,.12)}
 .form-group textarea{resize:vertical;min-height:70px}
+.form-group .field-error{display:none;font-size:11px;color:var(--red);margin-top:4px;align-items:center;gap:4px}
+.form-group .field-error.show{display:flex}
+.form-group.input-error input,.form-group.input-error select,.form-group.input-error textarea{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.1)}
+.form-group.input-error input:focus,.form-group.input-error select:focus,.form-group.input-error textarea:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.15)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
 
@@ -192,10 +196,12 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem;m
           <div class="form-group">
             <label>Email <span class="req">*</span></label>
             <input type="email" id="cEmail" placeholder="ali@example.com">
+            <span class="field-error" id="errEmail">Enter a valid email address</span>
           </div>
           <div class="form-group">
             <label>Phone <span class="req">*</span></label>
             <input type="tel" id="cPhone" placeholder="03XX-XXXXXXX">
+            <span class="field-error" id="errPhone">Enter your phone number</span>
           </div>
         </div>
       </div>
@@ -206,15 +212,18 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem;m
           <div class="form-group">
             <label>First Name <span class="req">*</span></label>
             <input type="text" id="cFirstName" placeholder="Ali">
+            <span class="field-error" id="errFirstName">Enter your first name</span>
           </div>
           <div class="form-group">
             <label>Last Name <span class="req">*</span></label>
             <input type="text" id="cLastName" placeholder="Ahmed">
+            <span class="field-error" id="errLastName">Enter your last name</span>
           </div>
         </div>
         <div class="form-group">
           <label>Address <span class="req">*</span></label>
           <input type="text" id="cAddress" placeholder="House #, Street, Area">
+          <span class="field-error" id="errAddress">Enter your complete address</span>
         </div>
         <div class="form-group">
           <label>Apartment, Suite, etc. (optional)</label>
@@ -224,6 +233,7 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem;m
           <div class="form-group">
             <label>City <span class="req">*</span></label>
             <input type="text" id="cCity" placeholder="Lahore">
+            <span class="field-error" id="errCity">Enter your city</span>
           </div>
           <div class="form-group">
             <label>Province</label>
@@ -390,32 +400,93 @@ function renderOrderSummary() {
   totalEl.textContent = formatPrice(total);
 }
 
+var VALIDATION_RULES = {
+  cEmail: { required: true, pattern: /\S+@\S+\.\S+/, msg: 'Enter a valid email address' },
+  cPhone: { required: true, msg: 'Enter your phone number' },
+  cFirstName: { required: true, msg: 'Enter your first name' },
+  cLastName: { required: true, msg: 'Enter your last name' },
+  cAddress: { required: true, msg: 'Enter your complete address' },
+  cCity: { required: true, msg: 'Enter your city' }
+};
+
+function clearErrors() {
+  document.querySelectorAll('.field-error').forEach(function(el) { el.classList.remove('show'); });
+  document.querySelectorAll('.form-group.input-error').forEach(function(el) { el.classList.remove('input-error'); });
+}
+
+function showError(id, msg) {
+  var input = document.getElementById(id);
+  if (!input) return;
+  var group = input.closest('.form-group');
+  if (!group) return;
+  group.classList.add('input-error');
+  var errEl = document.getElementById('err' + id.charAt(1).toUpperCase() + id.slice(2));
+  if (errEl) {
+    errEl.textContent = msg;
+    errEl.classList.add('show');
+  }
+}
+
+function firstErrorField() {
+  var ids = ['cEmail','cPhone','cFirstName','cLastName','cAddress','cCity'];
+  for (var i = 0; i < ids.length; i++) {
+    var el = document.getElementById(ids[i]);
+    if (el && el.closest('.form-group') && el.closest('.form-group').classList.contains('input-error')) {
+      return el;
+    }
+  }
+  return null;
+}
+
+function validateField(id) {
+  var el = document.getElementById(id);
+  if (!el) return true;
+  var rule = VALIDATION_RULES[id];
+  if (!rule) return true;
+  var val = el.value.trim();
+  if (rule.required && !val) {
+    showError(id, rule.msg);
+    return false;
+  }
+  if (rule.pattern && !rule.pattern.test(val)) {
+    showError(id, rule.msg);
+    return false;
+  }
+  return true;
+}
+
 function placeOrder() {
   var cart = getCart();
   if (cart.length === 0) {
     alert('Cart is empty!');
     return;
   }
-  var email = document.getElementById('cEmail').value.trim();
-  var phone = document.getElementById('cPhone').value.trim();
-  var firstName = document.getElementById('cFirstName').value.trim();
-  var lastName = document.getElementById('cLastName').value.trim();
-  var address = document.getElementById('cAddress').value.trim();
-  var city = document.getElementById('cCity').value.trim();
-  if (!email || !phone || !firstName || !lastName || !address || !city) {
-    alert('Meherbani farma kar required fields fill karein.');
+  clearErrors();
+  var valid = true;
+  valid = validateField('cEmail') && valid;
+  valid = validateField('cPhone') && valid;
+  valid = validateField('cFirstName') && valid;
+  valid = validateField('cLastName') && valid;
+  valid = validateField('cAddress') && valid;
+  valid = validateField('cCity') && valid;
+  if (!valid) {
+    var first = firstErrorField();
+    if (first) {
+      first.focus();
+      first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
     return;
   }
   var order = {
     items: cart,
-    email: email,
-    phone: phone,
-    firstName: firstName,
-    lastName: lastName,
-    fullName: firstName + ' ' + lastName,
-    address: address,
+    email: document.getElementById('cEmail').value.trim(),
+    phone: document.getElementById('cPhone').value.trim(),
+    firstName: document.getElementById('cFirstName').value.trim(),
+    lastName: document.getElementById('cLastName').value.trim(),
+    fullName: document.getElementById('cFirstName').value.trim() + ' ' + document.getElementById('cLastName').value.trim(),
+    address: document.getElementById('cAddress').value.trim(),
     apartment: document.getElementById('cApartment').value.trim(),
-    city: city,
+    city: document.getElementById('cCity').value.trim(),
     province: document.getElementById('cProvince').value.trim(),
     postal: document.getElementById('cPostal').value.trim(),
     notes: document.getElementById('cNotes').value.trim(),
@@ -425,14 +496,84 @@ function placeOrder() {
   };
   localStorage.setItem('mjLastOrder', JSON.stringify(order));
   localStorage.removeItem('mjCart');
+  if (typeof fbSaveOrder === 'function') {
+    fbSaveOrder(order).catch(function(e) { console.error('Firestore order save failed:', e); });
+  }
   if (window.MJStoreUI && typeof window.MJStoreUI.refreshCartUI === 'function') {
     window.MJStoreUI.refreshCartUI();
   }
-  alert('Alhamdulillah! Aapka order confirm ho gaya hai.\n\nCustomer: ' + order.fullName + '\nEmail: ' + order.email + '\nPhone: ' + order.phone + '\nAddress: ' + order.address + ', ' + order.city + '\n\nTotal: ' + formatPrice(order.total) + '\nPayment: ' + order.payment.toUpperCase() + '\n\nAapko jald delivery confirm kar di jayegi.');
-  renderOrderSummary();
+  sendConfirmationEmail(order);
+  document.getElementById('checkoutForm').innerHTML =
+    '<div style="grid-column:1/-1;text-align:center;padding:4rem 1.5rem">' +
+      '<div style="font-size:48px;margin-bottom:1rem">✅</div>' +
+      '<h1 style="font-family:\'Cormorant Garamond\',serif;font-size:32px;font-weight:300;margin-bottom:.5rem;color:var(--black)">Order Confirmed!</h1>' +
+      '<p style="font-size:14px;color:var(--muted);margin-bottom:.5rem;line-height:1.8">Alhamdulillah! Aapka order confirm ho gaya hai.<br>' +
+      'Confirmation email <strong>' + order.email + '</strong> par bhej di gayi hai.</p>' +
+      '<p style="font-size:13px;color:var(--muted);margin-bottom:2rem">Total: ' + formatPrice(order.total) + ' — ' + order.payment.toUpperCase() + '</p>' +
+      '<a href="home.html" style="display:inline-block;background:var(--black);color:var(--white);padding:12px 32px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;font-family:Inter,sans-serif;border-radius:6px">Continue Shopping</a>' +
+    '</div>';
+}
+
+function sendConfirmationEmail(order) {
+  if (typeof emailjs === 'undefined') return;
+  var itemsRows = order.items.map(function(item) {
+    var meta = [item.size, item.color].filter(Boolean).join(' - ');
+    var name = item.name + (meta ? ' (' + meta + ')' : '');
+    return '<tr style="border-bottom:1px solid #e8e0d4"><td style="padding:12px 0;font-size:13px;color:#3a3a3a">' + name + '</td><td style="padding:12px 0;font-size:13px;color:#3a3a3a;text-align:center">' + item.qty + '</td><td style="padding:12px 0;font-size:13px;color:#b8965a;text-align:right">PKR ' + Number(item.price * item.qty).toLocaleString('en-PK') + '</td></tr>';
+  }).join('');
+  var addressFull = order.address + (order.apartment ? ', ' + order.apartment : '') + ', ' + order.city + (order.province ? ', ' + order.province : '');
+  var orderId = 'MJ-' + Date.now().toString().slice(-6);
+  var html = '<div style="max-width:560px;margin:0 auto;font-family:Arial,sans-serif;background:#fdfcf8">' +
+    '<div style="background:#0a0a0a;padding:28px 32px;text-align:center">' +
+      '<h1 style="font-family:Georgia,serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#fff;margin:0">MAZHAR <span style="color:#b8965a">JEWELLERS</span></h1>' +
+    '</div>' +
+    '<div style="padding:32px">' +
+      '<h2 style="font-size:20px;color:#0a0a0a;font-weight:400;margin:0 0 6px">Order Confirmed ✓</h2>' +
+      '<p style="font-size:13px;color:#888;margin:0 0 20px;line-height:1.7">Assalam-o-Alaikum <strong>' + order.fullName + '</strong>,<br>Aapka order confirm ho gaya hai. Hum jald se jald aapka product deliver karne ki koshish karenge.</p>' +
+      '<div style="background:#f5ede0;border-radius:8px;padding:16px 20px;margin-bottom:20px">' +
+        '<table style="width:100%;font-size:12px;color:#3a3a3a">' +
+          '<tr><td style="padding:4px 0;color:#888">Order ID</td><td style="padding:4px 0;font-weight:500;text-align:right">' + orderId + '</td></tr>' +
+          '<tr><td style="padding:4px 0;color:#888">Payment</td><td style="padding:4px 0;font-weight:500;text-align:right">' + order.payment.toUpperCase() + '</td></tr>' +
+          '<tr><td style="padding:4px 0;color:#888">Total</td><td style="padding:4px 0;font-weight:600;color:#b8965a;text-align:right">PKR ' + Number(order.total).toLocaleString('en-PK') + '</td></tr>' +
+        '</table>' +
+      '</div>' +
+      '<h3 style="font-size:14px;color:#0a0a0a;font-weight:500;margin:0 0 10px">Order Items</h3>' +
+      '<table style="width:100%;border-collapse:collapse">' +
+        '<thead><tr style="border-bottom:2px solid #e8e0d4"><th style="padding:8px 0;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#888;text-align:left">Item</th><th style="padding:8px 0;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#888;text-align:center">Qty</th><th style="padding:8px 0;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#888;text-align:right">Price</th></tr></thead>' +
+        '<tbody>' + itemsRows + '</tbody>' +
+      '</table>' +
+      '<div style="border-top:2px solid #0a0a0a;padding:12px 0 0;margin-top:8px;text-align:right;font-size:16px;font-weight:600;color:#0a0a0a">Total: <span style="color:#b8965a">PKR ' + Number(order.total).toLocaleString('en-PK') + '</span></div>' +
+      '<div style="margin-top:24px;padding-top:20px;border-top:1px solid #e8e0d4">' +
+        '<h3 style="font-size:14px;color:#0a0a0a;font-weight:500;margin:0 0 8px">Delivery Address</h3>' +
+        '<p style="font-size:12px;color:#3a3a3a;line-height:1.7;margin:0">' + addressFull + '<br>Phone: ' + order.phone + '</p>' +
+      '</div>' +
+      (order.notes ? '<div style="margin-top:16px;padding:12px 16px;background:#f9f6f0;border-radius:6px;font-size:12px;color:#3a3a3a;line-height:1.6"><strong>Notes:</strong> ' + order.notes + '</div>' : '') +
+      '<div style="margin-top:24px;padding-top:20px;border-top:1px solid #e8e0d4;text-align:center">' +
+        '<p style="font-size:11px;color:#888;line-height:1.8;margin:0">Koi masla ho toh humse rabta karein:<br>' +
+        '<strong style="color:#0a0a0a">042-111-000-990</strong> &nbsp;|&nbsp; <strong style="color:#0a0a0a">info@mazharjewellers.com</strong></p>' +
+      '</div>' +
+    '</div>' +
+    '<div style="background:#0a0a0a;padding:20px 32px;text-align:center">' +
+      '<p style="font-size:10px;color:rgba(255,255,255,.35);margin:0">© 2025 Mazhar Jewellers — Quality aur trust ka naam</p>' +
+    '</div>' +
+  '</div>';
+  emailjs.send('service_jzag514', 'template_96wj2og', {
+    to_email: order.email,
+    to_name: order.fullName,
+    subject: 'Order Confirmed - ' + orderId,
+    message_html: html
+  }).then(function() {
+    console.log('Confirmation email sent to ' + order.email);
+  }, function(err) {
+    console.error('Email failed:', err);
+  });
 }
 
 renderOrderSummary();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+emailjs.init('TKPIh5risCZU6Ghf3');
 </script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
