@@ -471,7 +471,40 @@ function loadData() {
     renderCollectionImages();
   });
   loadSampleOrders();
+  loadOrdersFromFirestore();
   loadCollections();
+}
+
+function loadOrdersFromFirestore() {
+  if (typeof fbGetOrders !== 'function') return;
+  fbGetOrders().then(function(fbList) {
+    if (!fbList || fbList.length === 0) return;
+    var existingIds = {};
+    orders.forEach(function(o) { existingIds[o.id] = true; });
+    var added = 0;
+    fbList.forEach(function(fb) {
+      if (existingIds[fb.id] || existingIds['FB-' + fb.id]) return;
+      var total = 0;
+      if (fb.items) fb.items.forEach(function(i) { total += (i.price || 0) * (i.qty || 1); });
+      orders.push({
+        id: 'FB-' + fb.id.slice(-6),
+        customer: { name: fb.fullName || fb.customer?.name || 'Customer', email: fb.email || '', phone: fb.phone || '', city: fb.city || '' },
+        items: fb.items || [],
+        total: total,
+        payment: fb.payment || 'Cash on Delivery',
+        status: 'pending',
+        date: fb.createdAt ? new Date(fb.createdAt.seconds * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : new Date().toLocaleDateString(),
+        dateTime: fb.createdAt ? new Date(fb.createdAt.seconds * 1000).toISOString() : new Date().toISOString()
+      });
+      added++;
+    });
+    if (added > 0) {
+      saveOrders();
+      updateDashboard();
+      renderOrders();
+      renderCustomers();
+    }
+  }).catch(function(e) { console.error('Firestore orders load failed:', e); });
 }
 
 function loadProductsFromFirestore(callback) {

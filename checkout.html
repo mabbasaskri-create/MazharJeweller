@@ -477,6 +477,8 @@ function placeOrder() {
     }
     return;
   }
+  var orderId = 'MJ-' + String(Math.floor(Math.random() * 9000) + 1000);
+  var subtotal = cart.reduce(function(s, x) { return s + x.price * x.qty; }, 0);
   var order = {
     items: cart,
     email: document.getElementById('cEmail').value.trim(),
@@ -491,7 +493,7 @@ function placeOrder() {
     postal: document.getElementById('cPostal').value.trim(),
     notes: document.getElementById('cNotes').value.trim(),
     payment: document.getElementById('cPayment').value,
-    total: cart.reduce(function(s, x) { return s + x.price * x.qty; }, 0),
+    total: subtotal,
     date: new Date().toISOString()
   };
   localStorage.setItem('mjLastOrder', JSON.stringify(order));
@@ -499,6 +501,22 @@ function placeOrder() {
   if (typeof fbSaveOrder === 'function') {
     fbSaveOrder(order).catch(function(e) { console.error('Firestore order save failed:', e); });
   }
+  var adminOrder = {
+    id: orderId,
+    customer: { name: order.fullName, email: order.email, phone: order.phone, city: order.city },
+    items: cart.map(function(i) { return { name: i.name, qty: i.qty, price: i.price }; }),
+    subtotal: subtotal,
+    deliveryCharges: 0,
+    total: subtotal,
+    payment: order.payment === 'cod' ? 'Cash on Delivery' : order.payment,
+    status: 'pending',
+    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+    dateTime: new Date().toISOString()
+  };
+  var existing = [];
+  try { var s = localStorage.getItem('mjOrders'); if (s) existing = JSON.parse(s); } catch(e) {}
+  existing.push(adminOrder);
+  try { localStorage.setItem('mjOrders', JSON.stringify(existing)); } catch(e) {}
   if (window.MJStoreUI && typeof window.MJStoreUI.refreshCartUI === 'function') {
     window.MJStoreUI.refreshCartUI();
   }
@@ -521,7 +539,8 @@ function sendConfirmationEmail(order) {
     return {
       name: item.name + (meta ? ' (' + meta + ')' : ''),
       units: item.qty,
-      price: Number(item.price * item.qty).toLocaleString('en-PK')
+      price: Number(item.price * item.qty).toLocaleString('en-PK'),
+      image: item.image || ''
     };
   });
   var payload = {

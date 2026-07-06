@@ -154,6 +154,18 @@ function fbSaveOrder(order) {
   return db.collection(FB_ORDERS_COL).add(o);
 }
 
+function fbGetOrders() {
+  return db.collection(FB_ORDERS_COL).orderBy('createdAt', 'desc').get().then(function(snap) {
+    var list = [];
+    snap.forEach(function(doc) {
+      var d = doc.data();
+      d.id = doc.id;
+      list.push(d);
+    });
+    return list;
+  });
+}
+
 var FB_SETTINGS_COL = 'settings';
 
 function fbSaveHero(imageUrl) {
