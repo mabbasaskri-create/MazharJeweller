@@ -301,7 +301,7 @@ footer{background:#080808;color:rgba(255,255,255,.45);padding:4rem 1.5rem 2rem}
 
 <style>
 .h-scroll-wrap{position:relative}
-.h-scroll{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;padding:.25rem .25rem .5rem;cursor:grab;scroll-behavior:smooth}
+.h-scroll{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;padding:.25rem .25rem .5rem;cursor:grab;touch-action:pan-y}
 .h-scroll::-webkit-scrollbar{display:none}
 .h-scroll-item{flex-shrink:0;scroll-snap-align:start;transition:transform .4s ease,box-shadow .4s ease}
 .h-scroll-item:hover{transform:translateY(-4px)}
@@ -693,8 +693,16 @@ function initHorizontalScroll(){
       if(!item)return;
       busy=true;
       var amt=item.offsetWidth+getGap();
-      track.scrollBy({left:dir*amt,behavior:'smooth'});
-      setTimeout(function(){busy=false},400);
+      var target=track.scrollLeft+dir*amt;
+      target=Math.max(0,Math.min(target,track.scrollWidth-track.clientWidth));
+      var start=track.scrollLeft,diff=target-start,startTime;
+      function step(t){
+        if(!startTime)startTime=t;
+        var p=Math.min((t-startTime)/300,1);
+        track.scrollLeft=start+diff*(1-Math.pow(1-p,3));
+        if(p<1)requestAnimationFrame(step);else busy=false;
+      }
+      requestAnimationFrame(step);
     }
 
     function updateBtns(){
