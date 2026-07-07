@@ -720,10 +720,6 @@ function initHorizontalScroll(){
     });
     document.addEventListener('mouseup',function(){isDragging=false;track.classList.remove('dragging')});
 
-    track.addEventListener('touchstart',function(e){isDragging=true;startX=e.touches[0].pageX-track.offsetLeft;scrollLeft=track.scrollLeft},{passive:true});
-    track.addEventListener('touchmove',function(e){if(!isDragging)return;var x=e.touches[0].pageX-track.offsetLeft;track.scrollLeft=scrollLeft-(x-startX)*1.2},{passive:true});
-    track.addEventListener('touchend',function(){isDragging=false});
-
     track.setAttribute('tabindex','0');
     track.addEventListener('keydown',function(e){
       if(e.key==='ArrowLeft'){scrollBy(-1);e.preventDefault()}
