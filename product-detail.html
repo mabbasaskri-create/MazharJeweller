@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Product Detail | Mazhar Jewellers</title>
 <meta name="google-site-verification" content="c40zIueZWCKvZMRkUnQTcPVLAjdcU9Xo4SKm0TR_o40" />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://www.gstatic.com">
 <link rel="preconnect" href="https://firestore.googleapis.com">
 <link rel="preconnect" href="https://mazhar-jewellers-c502a.firebasestorage.app">
@@ -30,7 +30,7 @@
   --green:#22c55e;
 }
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden}
+body{font-family:'Outfit',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden}
 a{text-decoration:none;color:inherit}
 img{display:block;width:100%;height:100%;object-fit:cover}
 
@@ -39,7 +39,7 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 
 nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
 .nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:64px}
-.logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;letter-spacing:3px;white-space:nowrap}
+.logo{font-family:'Cinzel',serif;font-size:26px;font-weight:600;letter-spacing:3px;white-space:nowrap}
 .logo em{color:var(--gold);font-style:normal}
 .nav-links{display:flex;gap:1.2rem;list-style:none}
 .nav-links a{font-size:11px;letter-spacing:2px;color:var(--mid);text-transform:uppercase;transition:color .2s;white-space:nowrap}
@@ -47,14 +47,14 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .nav-icons{display:flex;gap:1rem;align-items:center}
 .nav-icon-btn{background:none;border:none;cursor:pointer;font-size:20px;color:var(--mid);transition:color .2s;padding:4px;line-height:1}
 .nav-icon-btn:hover{color:var(--gold)}
-.cart-btn{background:var(--black)!important;color:var(--white)!important;padding:8px 16px;font-size:10px;letter-spacing:2px;font-family:'Inter',sans-serif;border:none;cursor:pointer}
+.cart-btn{background:var(--black)!important;color:var(--white)!important;padding:8px 16px;font-size:10px;letter-spacing:2px;font-family:'Outfit',sans-serif;border:none;cursor:pointer}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
 .hamburger span{display:block;width:22px;height:1.5px;background:var(--black);transition:all .3s}
 
 .mobile-menu{display:none;position:fixed;inset:0;background:var(--white);z-index:300;padding:5rem 2rem 2rem;flex-direction:column;gap:0}
 .mobile-menu.open{display:flex}
 .mobile-menu-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;font-size:28px;cursor:pointer;color:var(--black)}
-.mobile-menu a{font-size:24px;font-family:'Cormorant Garamond',serif;color:var(--black);padding:1rem 0;border-bottom:1px solid var(--border);display:block}
+.mobile-menu a{font-size:24px;font-family:'Cinzel',serif;color:var(--black);padding:1rem 0;border-bottom:1px solid var(--border);display:block}
 .mobile-menu a:last-child{border-bottom:none}
 
 .product-wrap{max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem}
@@ -75,7 +75,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .breadcrumb span{color:var(--mid)}
 
 .prod-collection{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
-.prod-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin-bottom:.75rem;line-height:1.2}
+.prod-name{font-family:'Cinzel',serif;font-size:28px;font-weight:400;margin-bottom:.75rem;line-height:1.2}
 .prod-badge{display:inline-block;font-size:9px;letter-spacing:2px;padding:4px 8px;text-transform:uppercase;margin-bottom:1rem}
 .b-new{background:var(--black);color:var(--white)}
 .b-sale{background:var(--red);color:var(--white)}
@@ -93,7 +93,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .variant-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;display:block}
 .variant-label em{font-style:normal;color:var(--mid);font-weight:500}
 .size-options,.color-options{display:flex;gap:8px;flex-wrap:wrap}
-.size-btn{min-width:44px;height:44px;border:1px solid var(--border);background:var(--white);font-family:'Inter',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;color:var(--mid);padding:0 14px}
+.size-btn{min-width:44px;height:44px;border:1px solid var(--border);background:var(--white);font-family:'Outfit',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;color:var(--mid);padding:0 14px}
 .size-btn:hover{border-color:var(--gold);color:var(--gold)}
 .size-btn.active{border-color:var(--black);background:var(--black);color:var(--white)}
 .color-btn{width:36px;height:36px;border-radius:50%;border:2px solid var(--border);cursor:pointer;transition:all .2s;position:relative}
@@ -105,10 +105,10 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 /* Cart */
 .cart-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
 .qty-selector{display:flex;border:1px solid var(--border);align-items:center}
-.qty-btn{width:40px;height:44px;border:none;background:var(--white);font-size:16px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--mid);transition:background .2s}
+.qty-btn{width:40px;height:44px;border:none;background:var(--white);font-size:16px;cursor:pointer;font-family:'Outfit',sans-serif;color:var(--mid);transition:background .2s}
 .qty-btn:hover{background:var(--gold-pale)}
 .qty-val{width:44px;text-align:center;font-size:14px;font-weight:500}
-.add-cart-btn{flex:1;min-width:180px;background:var(--black);color:var(--white);border:none;padding:0 32px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;height:44px}
+.add-cart-btn{flex:1;min-width:180px;background:var(--black);color:var(--white);border:none;padding:0 32px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;font-family:'Outfit',sans-serif;transition:background .2s;height:44px}
 .add-cart-btn:hover{background:var(--charcoal)}
 .wish-btn{width:44px;height:44px;border:1px solid var(--border);background:var(--white);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--mid)}
 .wish-btn:hover{border-color:var(--red);color:var(--red)}
@@ -122,9 +122,9 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .loading{text-align:center;padding:4rem 1rem;color:var(--muted);font-size:14px}
 .error-page{text-align:center;padding:5rem 1rem}
 .error-page .icon{font-size:48px;margin-bottom:1rem}
-.error-page h2{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;margin-bottom:.5rem}
+.error-page h2{font-family:'Cinzel',serif;font-size:28px;font-weight:300;margin-bottom:.5rem}
 .error-page p{font-size:13px;color:var(--muted);margin-bottom:1.5rem}
-.error-page .btn{display:inline-block;background:var(--gold);color:var(--white);padding:12px 28px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Inter',sans-serif}
+.error-page .btn{display:inline-block;background:var(--gold);color:var(--white);padding:12px 28px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Outfit',sans-serif}
 
 /* Toast */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--black);color:var(--white);padding:12px 24px;font-size:12px;letter-spacing:1px;border-radius:4px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center}
@@ -133,7 +133,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 footer{background:#080808;color:rgba(255,255,255,.45);padding:3rem 1.5rem 2rem;margin-top:4rem}
 .footer-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
 .footer-copy{font-size:10px;color:rgba(255,255,255,.25)}
-.footer-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;letter-spacing:2px;color:var(--white)}
+.footer-logo{font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:2px;color:var(--white)}
 .footer-logo em{color:var(--gold);font-style:normal}
 
 @media(max-width:900px){

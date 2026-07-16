@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel | Mazhar Jewellers</title>
 <meta name="google-site-verification" content="c40zIueZWCKvZMRkUnQTcPVLAjdcU9Xo4SKm0TR_o40" />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://www.gstatic.com">
 <link rel="preconnect" href="https://firestore.googleapis.com">
 <link rel="preconnect" href="https://mazhar-jewellers-c502a.firebasestorage.app">
@@ -31,7 +31,7 @@
   --blue:#3b82f6;
 }
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:#f8f6f2;color:var(--black);min-height:100vh;display:flex;flex-direction:column}
+body{font-family:'Outfit',sans-serif;background:#f8f6f2;color:var(--black);min-height:100vh;display:flex;flex-direction:column}
 a{text-decoration:none;color:inherit}
 img{display:block;max-width:100%}
 
@@ -40,7 +40,7 @@ img{display:block;max-width:100%}
 
 .admin-header{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
 .admin-header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:60px}
-.admin-header .logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:3px}
+.admin-header .logo{font-family:'Cinzel',serif;font-size:22px;font-weight:600;letter-spacing:3px}
 .admin-header .logo em{color:var(--gold);font-style:normal}
 .admin-header .badge{font-size:9px;letter-spacing:2px;background:var(--gold-pale);color:var(--mid);padding:4px 10px;text-transform:uppercase}
 .admin-header .back-link{font-size:11px;color:var(--muted);transition:color .2s}
@@ -54,13 +54,13 @@ img{display:block;max-width:100%}
 .admin-sidebar .nav-item .icon{font-size:16px;width:20px;text-align:center}
 .admin-sidebar .nav-item .count{background:var(--gold-pale);color:var(--mid);font-size:9px;padding:2px 7px;border-radius:10px;margin-left:auto}
 .admin-main{padding:2rem}
-.admin-main h1{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;margin-bottom:4px}
+.admin-main h1{font-family:'Cinzel',serif;font-size:28px;font-weight:300;margin-bottom:4px}
 .admin-main .sub{font-size:12px;color:var(--muted);margin-bottom:2rem}
 
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
 .stat-card{background:var(--white);border:1px solid var(--border);padding:1.25rem}
 .stat-card .label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.stat-card .value{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;color:var(--black)}
+.stat-card .value{font-family:'Cinzel',serif;font-size:28px;font-weight:400;color:var(--black)}
 .stat-card .sub{font-size:11px;color:var(--muted);margin-top:4px}
 .stat-card.gold{border-left:3px solid var(--gold)}
 .stat-card.green{border-left:3px solid var(--green)}
@@ -69,8 +69,8 @@ img{display:block;max-width:100%}
 
 .section-card{background:var(--white);border:1px solid var(--border);margin-bottom:1.5rem}
 .section-card .card-hd{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border)}
-.section-card .card-hd h2{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400}
-.section-card .card-hd .action{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);cursor:pointer;border:none;background:none;font-family:'Inter',sans-serif;transition:color .2s;padding:4px 0}
+.section-card .card-hd h2{font-family:'Cinzel',serif;font-size:18px;font-weight:400}
+.section-card .card-hd .action{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);cursor:pointer;border:none;background:none;font-family:'Outfit',sans-serif;transition:color .2s;padding:4px 0}
 .section-card .card-hd .action:hover{color:var(--gold-light)}
 .section-card .card-body{padding:0;overflow-x:auto}
 
@@ -91,9 +91,9 @@ tr:hover td{background:#faf8f4}
 
 .access-denied{display:none;text-align:center;padding:4rem 2rem}
 .access-denied .icon{font-size:48px;margin-bottom:1rem}
-.access-denied h1{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:.5rem}
+.access-denied h1{font-family:'Cinzel',serif;font-size:32px;font-weight:300;margin-bottom:.5rem}
 .access-denied p{font-size:13px;color:var(--muted);margin-bottom:1.5rem}
-.access-denied .btn{display:inline-block;background:var(--gold);color:var(--white);padding:12px 28px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s}
+.access-denied .btn{display:inline-block;background:var(--gold);color:var(--white);padding:12px 28px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:background .2s}
 .access-denied .btn:hover{background:var(--gold-light)}
 
 #adminContent{display:none}
@@ -112,7 +112,7 @@ tr:hover td{background:#faf8f4}
   .admin-main h1{font-size:24px}
   .section-card .card-hd{flex-direction:column;align-items:flex-start;gap:6px}
 }
-.btn-mobile-preview{background:var(--black);color:var(--white);border:none;padding:7px 14px;font-size:10px;letter-spacing:1.5px;cursor:pointer;font-family:'Inter',sans-serif;border-radius:4px;transition:background .2s;white-space:nowrap}
+.btn-mobile-preview{background:var(--black);color:var(--white);border:none;padding:7px 14px;font-size:10px;letter-spacing:1.5px;cursor:pointer;font-family:'Outfit',sans-serif;border-radius:4px;transition:background .2s;white-space:nowrap}
 .btn-mobile-preview:hover{background:var(--gold)}
 
 </style>
@@ -127,7 +127,7 @@ tr:hover td{background:#faf8f4}
   <div class="admin-header-inner">
     <a href="index.html" class="logo">MAZHAR <em>JEWELLERS</em> <span class="badge">Admin</span></a>
     <div style="display:flex;align-items:center;gap:12px">
-      <select id="previewPageSelect" style="background:var(--gold-pale);border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;outline:none;color:var(--black)">
+      <select id="previewPageSelect" style="background:var(--gold-pale);border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-size:11px;font-family:'Outfit',sans-serif;cursor:pointer;outline:none;color:var(--black)">
         <option value="index.html">Home</option>
         <option value="necklaces.html">Necklaces</option>
         <option value="earrings.html">Earrings</option>
@@ -228,7 +228,7 @@ tr:hover td{background:#faf8f4}
       <div class="section-card">
         <div class="card-hd">
           <h2>Orders</h2>
-          <select id="orderFilter" onchange="renderOrders()" style="font-family:'Inter',sans-serif;font-size:10px;letter-spacing:1px;padding:6px 10px;border:1px solid var(--border);background:var(--white);color:var(--mid);text-transform:uppercase;cursor:pointer">
+          <select id="orderFilter" onchange="renderOrders()" style="font-family:'Outfit',sans-serif;font-size:10px;letter-spacing:1px;padding:6px 10px;border:1px solid var(--border);background:var(--white);color:var(--mid);text-transform:uppercase;cursor:pointer">
             <option value="all">All Orders</option>
             <option value="pending">Pending</option>
             <option value="shipped">Shipped</option>
@@ -275,11 +275,11 @@ tr:hover td{background:#faf8f4}
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:600px">
             <div style="grid-column:span 2">
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Product Name</label>
-              <input id="prodName" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="e.g. Crystal Pendant Necklace">
+              <input id="prodName" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:12px;outline:none" placeholder="e.g. Crystal Pendant Necklace">
             </div>
             <div>
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Category</label>
-              <select id="prodCategory" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none">
+              <select id="prodCategory" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:12px;outline:none">
                 <option value="necklaces">Necklaces</option>
                 <option value="earrings">Earrings</option>
                 <option value="rings">Rings</option>
@@ -289,7 +289,7 @@ tr:hover td{background:#faf8f4}
             </div>
             <div>
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Homepage Section</label>
-              <select id="prodSection" onchange="syncSection()" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none">
+              <select id="prodSection" onchange="syncSection()" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:12px;outline:none">
                 <option value="necklaces">Necklaces Collection</option>
                 <option value="earrings">Earrings Collection</option>
                 <option value="rings">Rings Collection</option>
@@ -300,15 +300,15 @@ tr:hover td{background:#faf8f4}
             </div>
             <div>
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Price (PKR)</label>
-              <input id="prodPrice" type="number" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="e.g. 12500">
+              <input id="prodPrice" type="number" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:12px;outline:none" placeholder="e.g. 12500">
             </div>
             <div>
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Old Price (optional)</label>
-              <input id="prodOldPrice" type="number" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="e.g. 15600">
+              <input id="prodOldPrice" type="number" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:12px;outline:none" placeholder="e.g. 15600">
             </div>
             <div>
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Badge</label>
-              <select id="prodBadge" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none">
+              <select id="prodBadge" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:12px;outline:none">
                 <option value="">None</option>
                 <option value="NEW IN">NEW IN</option>
                 <option value="BEST SELLER">BEST SELLER</option>
@@ -317,32 +317,32 @@ tr:hover td{background:#faf8f4}
             </div>
             <div style="grid-column:span 2">
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Product Image</label>
-              <input id="prodImageFile" type="file" accept="image/*" multiple style="width:100%;font-size:11px;color:var(--mid);font-family:'Inter',sans-serif;padding:6px 0">
+              <input id="prodImageFile" type="file" accept="image/*" multiple style="width:100%;font-size:11px;color:var(--mid);font-family:'Outfit',sans-serif;padding:6px 0">
               <div id="prodImageStatus" style="font-size:10px;color:var(--muted);margin-top:2px"></div>
               <div id="prodImagePreview" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;min-height:0"></div>
               <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
-                <input id="prodImage" style="flex:1;min-width:150px;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="Or paste image URL...">
+                <input id="prodImage" style="flex:1;min-width:150px;padding:10px 12px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:12px;outline:none" placeholder="Or paste image URL...">
                 <label style="font-size:10px;color:var(--muted);display:flex;align-items:center;gap:4px;white-space:nowrap">
                   BG Threshold:
                   <input id="bgThreshold" type="range" min="0" max="255" value="200" style="width:60px">
                   <span id="bgThresholdVal">200</span>
                 </label>
-                <button type="button" onclick="removeBgFromImages()" style="background:var(--gold);color:var(--white);border:none;padding:8px 14px;font-size:10px;letter-spacing:1.5px;cursor:pointer;font-family:'Inter',sans-serif;border-radius:4px;white-space:nowrap">Remove BG</button>
+                <button type="button" onclick="removeBgFromImages()" style="background:var(--gold);color:var(--white);border:none;padding:8px 14px;font-size:10px;letter-spacing:1.5px;cursor:pointer;font-family:'Outfit',sans-serif;border-radius:4px;white-space:nowrap">Remove BG</button>
               </div>
             </div>
             <div style="grid-column:span 2">
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Collection</label>
-              <select id="prodCollection" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none">
+              <select id="prodCollection" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:12px;outline:none">
                 <option value="">None</option>
               </select>
             </div>
             <div>
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Sizes (comma-separated)</label>
-              <input id="prodSizes" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="e.g. S, M, L, XL">
+              <input id="prodSizes" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:12px;outline:none" placeholder="e.g. S, M, L, XL">
             </div>
             <div>
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Colors (comma-separated)</label>
-              <input id="prodColors" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none" placeholder="e.g. Gold, Silver, Rose Gold">
+              <input id="prodColors" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:12px;outline:none" placeholder="e.g. Gold, Silver, Rose Gold">
             </div>
             <div style="grid-column:span 2">
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Most Loved Jewellery</label>
@@ -352,10 +352,10 @@ tr:hover td{background:#faf8f4}
             </div>
             <div style="grid-column:span 2">
               <label style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Description (optional)</label>
-              <textarea id="prodDescription" rows="3" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:12px;outline:none;resize:vertical" placeholder="Product description..."></textarea>
+              <textarea id="prodDescription" rows="3" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:12px;outline:none;resize:vertical" placeholder="Product description..."></textarea>
             </div>
             <div style="grid-column:span 2">
-              <button class="action" style="background:var(--gold);color:var(--white);padding:12px 28px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Inter',sans-serif" onclick="saveProduct()">Save Product</button>
+              <button class="action" style="background:var(--gold);color:var(--white);padding:12px 28px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Outfit',sans-serif" onclick="saveProduct()">Save Product</button>
             </div>
           </div>
         </div>
