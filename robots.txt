@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin.html
 Disallow: /fix-cors.html
 
-Sitemap: https://mazharjewellers.com/sitemap.xml
+Sitemap: https://mazhar-jewellers.vercel.app/sitemap.xml
