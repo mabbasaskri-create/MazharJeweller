@@ -142,11 +142,11 @@ function syncFromFirestore(callback) {
 
 // ===== COLLECTIONS =====
 var COLLECTION_DEFAULTS = [
-  { id: 'c1', name: 'Necklaces', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&q=80', link: 'necklaces.html' },
-  { id: 'c2', name: 'Earrings', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&q=80', link: 'earrings.html' },
-  { id: 'c3', name: 'Rings', image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&q=80', link: 'rings.html' },
-  { id: 'c4', name: 'Bracelets', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&q=80', link: 'bracelets.html' },
-  { id: 'c5', name: 'GemStones', image: 'https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=500&q=80', link: 'gemstones.html' }
+  { id: 'c1', name: 'Necklaces', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&q=30', link: 'necklaces.html' },
+  { id: 'c2', name: 'Earrings', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=300&q=30', link: 'earrings.html' },
+  { id: 'c3', name: 'Rings', image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=300&q=30', link: 'rings.html' },
+  { id: 'c4', name: 'Bracelets', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=300&q=30', link: 'bracelets.html' },
+  { id: 'c5', name: 'GemStones', image: 'https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=300&q=30', link: 'gemstones.html' }
 ];
 
 function getCollections() {
