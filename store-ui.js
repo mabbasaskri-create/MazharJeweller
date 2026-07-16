@@ -9,7 +9,8 @@
     { name: 'Rings', link: 'rings.html', type: 'page', keywords: 'rings ring band' },
     { name: 'Bracelets', link: 'bracelets.html', type: 'page', keywords: 'bracelets bracelet bangle' },
     { name: 'GemStones', link: 'gemstones.html', type: 'page', keywords: 'gemstones gemstone stone' },
-    { name: 'Login / Account', link: 'login.html', type: 'page', keywords: 'login account sign in' }
+    { name: 'Login / Account', link: 'login.html', type: 'page', keywords: 'login account sign in' },
+    { name: 'All Products', link: 'all-products.html', type: 'page', keywords: 'all products collection browse saare tamam' }
   ];
 
   function getAllProducts() {
