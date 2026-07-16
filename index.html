@@ -779,6 +779,10 @@ if (document.readyState === 'loading') {
 (function(){
   var loader=document.getElementById('loader');
   if(!loader)return;
+  if(sessionStorage.getItem('mjLoaderDone')){
+    loader.style.display='none';
+    return;
+  }
   document.body.style.overflow='hidden';
   function splitLetters(sel,delay){
     var el=document.querySelector(sel);
@@ -796,6 +800,7 @@ if (document.readyState === 'loading') {
   setTimeout(function(){
     loader.classList.add('hide');
     document.body.style.overflow='';
+    sessionStorage.setItem('mjLoaderDone','1');
     setTimeout(function(){loader.style.display='none'},900);
   },3000);
 })();
