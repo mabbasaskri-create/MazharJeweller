@@ -753,6 +753,9 @@ function initHorizontalScroll(){
       tx=e.touches[0].clientX;ty=e.touches[0].clientY;
     },{passive:true});
     track.addEventListener('touchmove',function(e){
+      var dx=Math.abs(e.touches[0].clientX-tx);
+      var dy=Math.abs(e.touches[0].clientY-ty);
+      if(dy>dx)return;
       e.preventDefault();
     },{passive:false});
     track.addEventListener('touchend',function(e){
