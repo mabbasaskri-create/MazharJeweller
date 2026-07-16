@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /admin.html
-Disallow: /fix-cors.html
 
 Sitemap: https://mazhar-jewellers.vercel.app/sitemap.xml
