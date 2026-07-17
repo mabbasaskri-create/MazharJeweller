@@ -17,6 +17,11 @@
 <link rel="dns-prefetch" href="https://mazhar-jewellers-c502a.firebasestorage.app">
 <link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js">
 <link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js">
+<script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+<script defer src="firebase-config.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -479,11 +484,22 @@ function getStatusClass(status) {
     }
     document.getElementById('adminContent').style.display = 'block';
     document.getElementById('adminName').textContent = user.name || 'Admin';
-    loadData();
+    waitForFirebase(function() { loadData(); });
   } catch(e) {
     document.getElementById('authGuard').style.display = 'block';
   }
 })();
+
+function waitForFirebase(callback, attempts) {
+  attempts = attempts || 0;
+  if (typeof fbGetOrders === 'function' && typeof fbGetProducts === 'function') {
+    callback();
+  } else if (attempts < 50) {
+    setTimeout(function() { waitForFirebase(callback, attempts + 1); }, 100);
+  } else {
+    callback();
+  }
+}
 
 function loadData() {
   loadProductsFromFirestore(function() {
@@ -1167,11 +1183,6 @@ function resetHeroImage() {
   alert('Hero image reset to default.');
 }
 </script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
-<script src="firebase-config.js"></script>
 <script>
 document.getElementById('prodImageFile').addEventListener('change', function(e) {
   var files = e.target.files;
